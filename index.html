@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ВНЖ Калькулятор Німеччина — Aufenthaltserlaubnis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --red: #CC0000;
+    --red-light: #fff0f0;
+    --red-dark: #991111;
+    --gold: #FFCE00;
+    --black: #1a1a1a;
+    --green: #1a7a4a;
+    --green-light: #edf9f1;
+    --amber: #b56900;
+    --amber-light: #fff8e6;
+    --blue: #1557a0;
+    --blue-light: #eff6ff;
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --surface2: #f9f8f5;
+    --border: rgba(0,0,0,0.09);
+    --border2: rgba(0,0,0,0.16);
+    --text: #1a1a1a;
+    --text2: #5a5856;
+    --text3: #9a9794;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.07), 0 0 1px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.10), 0 0 1px rgba(0,0,0,0.08);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* ─── TOP NAV ─── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--black);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem;
+    height: 56px;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none;
+  }
+  .flag-mini { display: flex; flex-direction: column; width: 22px; height: 14px; border-radius: 2px; overflow: hidden; }
+  .flag-mini span { flex: 1; display: block; }
+  .fm1 { background: #1a1a1a; border-top: 1px solid #333; }
+  .fm2 { background: #CC0000; }
+  .fm3 { background: #FFCE00; }
+  .nav-title { color: #fff; font-size: 15px; font-weight: 500; letter-spacing: -0.01em; }
+  .nav-badge { font-size: 11px; background: var(--red); color: #fff; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: var(--black);
+    padding: 4rem 2rem 3.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: 'DE';
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    font-size: 280px; font-weight: 700; color: rgba(255,255,255,0.03);
+    letter-spacing: -0.05em; pointer-events: none; white-space: nowrap;
+  }
+  .flag-hero { display: flex; height: 6px; width: 100px; border-radius: 3px; overflow: hidden; margin: 0 auto 1.5rem; }
+  .flag-hero span { flex: 1; }
+  .fh1 { background: #3a3a3a; }
+  .fh2 { background: #CC0000; }
+  .fh3 { background: #FFCE00; }
+  .hero h1 {
+    font-size: clamp(24px, 4vw, 40px);
+    font-weight: 600; color: #fff;
+    letter-spacing: -0.03em; line-height: 1.2;
+    margin-bottom: 0.75rem;
+  }
+  .hero h1 em { color: var(--gold); font-style: normal; }
+  .hero p { color: rgba(255,255,255,0.55); font-size: 15px; max-width: 480px; margin: 0 auto; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 1.5rem; }
+  .hero-tag {
+    font-size: 12px; padding: 4px 12px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px; color: rgba(255,255,255,0.5);
+  }
+
+  /* ─── MAIN LAYOUT ─── */
+  .page { max-width: 700px; margin: 0 auto; padding: 2rem 1.25rem 4rem; }
+
+  /* ─── STEPS TRACK ─── */
+  .track {
+    display: flex; align-items: center; gap: 0;
+    margin-bottom: 2rem;
+    background: var(--surface); border-radius: 30px;
+    padding: 6px 8px;
+    box-shadow: var(--shadow);
+    overflow-x: auto;
+  }
+  .track-step {
+    flex: 1; min-width: 32px;
+    display: flex; align-items: center; justify-content: center;
+    height: 32px; border-radius: 20px;
+    font-size: 12px; font-weight: 500; transition: all 0.25s;
+    position: relative; white-space: nowrap;
+    padding: 0 6px;
+  }
+  .track-step.done { color: var(--green); }
+  .track-step.active { background: var(--black); color: #fff; }
+  .track-step.pending { color: var(--text3); }
+  .track-step.done::after {
+    content: ''; display: block;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--green-light); border: 1.5px solid var(--green);
+    position: absolute; top: 50%; right: -1px; transform: translateY(-50%);
+  }
+  .track-connector { width: 1px; height: 16px; background: var(--border); flex-shrink: 0; }
+
+  /* ─── CARD ─── */
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 1.75rem;
+    margin-bottom: 1rem;
+  }
+  .card-label {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text3);
+    margin-bottom: 0.5rem;
+  }
+  .card-question {
+    font-size: 18px; font-weight: 600; color: var(--text);
+    letter-spacing: -0.02em; margin-bottom: 0.3rem; line-height: 1.3;
+  }
+  .card-hint { font-size: 13px; color: var(--text2); margin-bottom: 1.25rem; }
+
+  /* ─── OPTIONS ─── */
+  .opts { display: flex; flex-direction: column; gap: 6px; }
+  .opt {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 14px; border-radius: var(--radius-sm);
+    border: 1.5px solid var(--border);
+    cursor: pointer; transition: all 0.15s;
+    font-size: 14px; color: var(--text);
+    background: var(--surface);
+    user-select: none;
+  }
+  .opt:hover { border-color: var(--border2); background: var(--surface2); }
+  .opt.selected { border-color: var(--red); background: var(--red-light); color: var(--red-dark); }
+  .opt-radio {
+    width: 18px; height: 18px; border-radius: 50%;
+    border: 2px solid var(--border2); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .opt.selected .opt-radio { background: var(--red); border-color: var(--red); }
+  .opt.selected .opt-radio::after {
+    content: ''; width: 6px; height: 6px;
+    background: #fff; border-radius: 50%;
+  }
+  .opt-check {
+    width: 18px; height: 18px; border-radius: 5px;
+    border: 2px solid var(--border2); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .opt.selected .opt-check {
+    background: var(--red); border-color: var(--red);
+  }
+  .opt.selected .opt-check::after {
+    content: '';
+    width: 10px; height: 7px;
+    border-left: 2px solid #fff; border-bottom: 2px solid #fff;
+    transform: rotate(-45deg) translateY(-1px);
+    display: block;
+  }
+
+  /* ─── FORM FIELDS ─── */
+  .field-group { margin-bottom: 1.1rem; }
+  .field-group:last-child { margin-bottom: 0; }
+  label.fl { display: block; font-size: 13px; font-weight: 500; color: var(--text2); margin-bottom: 5px; }
+  input[type="number"], select {
+    width: 100%; padding: 10px 14px;
+    font-size: 15px; font-family: 'DM Sans', sans-serif;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--text);
+    outline: none; transition: border-color 0.15s;
+    appearance: none;
+  }
+  input[type="number"]:focus, select:focus { border-color: var(--black); }
+  select { background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a9794' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+  .field-note { font-size: 12px; color: var(--text3); margin-top: 4px; }
+  .err-msg { font-size: 12px; color: var(--red); margin-top: 5px; display: none; }
+
+  /* ─── SALARY VISUAL ─── */
+  .salary-bar-wrap { margin-top: 10px; }
+  .salary-bar-track { height: 6px; background: var(--border); border-radius: 3px; position: relative; margin: 6px 0 4px; }
+  .salary-bar-fill { height: 100%; border-radius: 3px; background: var(--red); transition: width 0.3s, background 0.3s; max-width: 100%; }
+  .salary-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text3); }
+
+  /* ─── BUTTONS ─── */
+  .btns { display: flex; gap: 10px; margin-top: 1.25rem; }
+  .btn-back {
+    padding: 11px 20px; font-size: 14px; font-family: 'DM Sans', sans-serif;
+    background: transparent; color: var(--text2);
+    border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+    cursor: pointer; transition: all 0.15s;
+  }
+  .btn-back:hover { border-color: var(--border2); background: var(--surface2); }
+  .btn-next {
+    flex: 1; padding: 12px; font-size: 15px; font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--black); color: #fff;
+    border: none; border-radius: var(--radius-sm);
+    cursor: pointer; transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .btn-next:hover { background: #2d2d2d; }
+  .btn-next:active { transform: scale(0.99); }
+
+  /* ─── RESULT ─── */
+  .result-hero {
+    background: var(--black);
+    border-radius: var(--radius); padding: 2rem;
+    text-align: center; margin-bottom: 1rem;
+    box-shadow: var(--shadow-lg);
+  }
+  .score-ring-svg { display: block; margin: 0 auto 1rem; }
+  .result-verdict { font-size: 22px; font-weight: 700; color: #fff; letter-spacing: -0.02em; }
+  .result-sub { font-size: 14px; color: rgba(255,255,255,0.5); margin-top: 4px; }
+  .perm-badge {
+    display: inline-block; margin-top: 1rem;
+    font-family: 'DM Mono', monospace; font-size: 11px;
+    padding: 5px 14px; border-radius: 20px;
+    background: rgba(255,206,0,0.12); color: var(--gold);
+    border: 1px solid rgba(255,206,0,0.25);
+  }
+
+  .factors-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px; margin: 1rem 0;
+  }
+  .factor {
+    padding: 12px 14px; border-radius: var(--radius-sm);
+    border: 1.5px solid;
+  }
+  .factor.ok { background: var(--green-light); border-color: rgba(26,122,74,0.25); }
+  .factor.warn { background: var(--amber-light); border-color: rgba(181,105,0,0.25); }
+  .factor.bad { background: var(--red-light); border-color: rgba(204,0,0,0.2); }
+  .factor-name { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+  .factor.ok .factor-name { color: var(--green); }
+  .factor.warn .factor-name { color: var(--amber); }
+  .factor.bad .factor-name { color: var(--red-dark); }
+  .factor-val { font-size: 13px; margin-top: 2px; }
+  .factor.ok .factor-val { color: #2a7a50; }
+  .factor.warn .factor-val { color: #8a5200; }
+  .factor.bad .factor-val { color: var(--red-dark); }
+
+  .recs-section { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.5rem; }
+  .recs-title { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 1rem; }
+  .rec {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 12px 14px; border-radius: var(--radius-sm);
+    margin-bottom: 8px;
+  }
+  .rec:last-child { margin-bottom: 0; }
+  .rec.warn { background: var(--amber-light); }
+  .rec.ok { background: var(--green-light); }
+  .rec.info { background: var(--blue-light); }
+  .rec-dot {
+    width: 20px; height: 20px; border-radius: 50%;
+    flex-shrink: 0; display: flex; align-items: center;
+    justify-content: center; font-size: 11px; font-weight: 700;
+    margin-top: 1px; color: #fff;
+  }
+  .rec.warn .rec-dot { background: var(--amber); }
+  .rec.ok .rec-dot { background: var(--green); }
+  .rec.info .rec-dot { background: var(--blue); }
+  .rec-text { font-size: 13px; line-height: 1.55; }
+  .rec-text strong { font-weight: 600; }
+  .rec.warn .rec-text { color: #5a3800; }
+  .rec.ok .rec-text { color: #0e4a28; }
+  .rec.info .rec-text { color: #0a3566; }
+
+  .restart-btn {
+    width: 100%; margin-top: 1rem; padding: 12px;
+    font-size: 14px; font-family: 'DM Sans', sans-serif;
+    background: transparent; color: var(--text2);
+    border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+    cursor: pointer; transition: all 0.15s;
+  }
+  .restart-btn:hover { background: var(--surface); border-color: var(--border2); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--black); color: rgba(255,255,255,0.3);
+    text-align: center; padding: 1.5rem;
+    font-size: 12px; line-height: 1.7;
+  }
+  footer a { color: rgba(255,255,255,0.4); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 520px) {
+    .factors-grid { grid-template-columns: 1fr; }
+    .track { gap: 0; }
+    .track-step { font-size: 11px; }
+    nav { padding: 0 1rem; }
+    .page { padding: 1.5rem 1rem 3rem; }
+    .hero { padding: 2.5rem 1.25rem 2rem; }
+    .card { padding: 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="flag-mini">
+      <span class="fm1"></span>
+      <span class="fm2"></span>
+      <span class="fm3"></span>
+    </div>
+    <span class="nav-title">ВНЖ Калькулятор</span>
+  </a>
+  <span class="nav-badge">Безкоштовно</span>
+</nav>
+
+<div class="hero">
+  <div class="flag-hero">
+    <span class="fh1"></span><span class="fh2"></span><span class="fh3"></span>
+  </div>
+  <h1>Які ваші шанси на<br><em>ВНЖ в Німеччині?</em></h1>
+  <p>Пройдіть 6 кроків — отримайте персональну оцінку та рекомендації для отримання Aufenthaltserlaubnis</p>
+  <div class="hero-tags">
+    <span class="hero-tag">Aufenthaltserlaubnis</span>
+    <span class="hero-tag">Niederlassungserlaubnis</span>
+    <span class="hero-tag">EU Blue Card</span>
+    <span class="hero-tag">§9 AufenthG</span>
+  </div>
+</div>
+
+<div class="page">
+  <div id="track-bar"></div>
+  <div id="app"></div>
+</div>
+
+<footer>
+  <p>Калькулятор надає орієнтовну оцінку на основі загальних критеріїв. Для юридичної консультації зверніться до<br>акредитованого імміграційного адвоката або до місцевої <strong>Ausländerbehörde</strong>.</p>
+</footer>
+
+<script>
+const STEPS = [
+  {
+    id: 'status', label: 'Статус',
+    title: 'Ваш поточний правовий статус',
+    hint: 'На якій підставі ви зараз перебуваєте в Німеччині?',
+    type: 'single', field: 'status',
+    options: [
+      { val: 'bluecardeu', label: 'EU Blue Card', sub: 'Для висококваліфікованих спеціалістів' },
+      { val: 'work', label: 'Робоча віза', sub: 'Aufenthaltserlaubnis zur Erwerbstätigkeit' },
+      { val: 'freelance', label: 'Самозайнятий / Freiberufler', sub: 'Freelancer, Selbstständig' },
+      { val: 'student', label: 'Студентська віза', sub: 'Zur Ausbildung / Studium' },
+      { val: 'family', label: 'Возз\'єднання сім\'ї', sub: 'Familiennachzug' },
+      { val: 'humanitarian', label: 'Тимчасовий захист §24', sub: 'Ukrainer та інші' },
+      { val: 'jobseeker', label: 'Jobseeker / пошук роботи', sub: 'Visum zur Jobsuche' },
+      { val: 'tourist', label: 'Турист / без статусу', sub: 'Без Aufenthaltserlaubnis' },
+    ]
+  },
+  {
+    id: 'time', label: 'Час',
+    title: 'Скільки ви вже в Німеччині?',
+    hint: 'Введіть кількість повних місяців легального перебування',
+    type: 'months',
+  },
+  {
+    id: 'finance', label: 'Фінанси',
+    title: 'Фінансова ситуація',
+    hint: 'Дохід — один з ключових критеріїв при оцінці заяви',
+    type: 'finance',
+  },
+  {
+    id: 'language', label: 'Мова',
+    title: 'Рівень знання німецької мови',
+    hint: 'B1 — мінімальний рівень для більшості типів постійного ВНЖ',
+    type: 'single', field: 'language',
+    options: [
+      { val: 'none', label: 'Не знаю / A0', sub: 'Нульовий рівень' },
+      { val: 'a1', label: 'A1 — Початковий', sub: 'Базові слова та фрази' },
+      { val: 'a2', label: 'A2 — Елементарний', sub: 'Прості розмови' },
+      { val: 'b1', label: 'B1 — Середній', sub: 'Мінімум для Niederlassungserlaubnis' },
+      { val: 'b2', label: 'B2 — Вищий середній', sub: 'Гарне знання мови' },
+      { val: 'c1', label: 'C1 — Просунутий', sub: 'Вільне спілкування' },
+      { val: 'c2', label: 'C2 — Майстерний', sub: 'Майже рідна мова' },
+    ]
+  },
+  {
+    id: 'docs', label: 'Документи',
+    title: 'Наявні документи та умови',
+    hint: 'Оберіть все, що стосується вас (можна кілька)',
+    type: 'multi', field: 'docs',
+    options: [
+      { val: 'anmeldung', label: 'Є реєстрація (Anmeldung)' },
+      { val: 'health_ins', label: 'Медична страховка (Krankenversicherung)' },
+      { val: 'pension', label: 'Сплачую пенсійні внески (Rentenversicherung)' },
+      { val: 'integration_course', label: 'Пройшов(ла) Integrationskurs' },
+      { val: 'no_criminal', label: 'Немає судимостей / порушень' },
+      { val: 'housing', label: 'Є власне або орендоване житло' },
+      { val: 'tax', label: 'Регулярна подача Steuererklärung' },
+    ]
+  },
+  {
+    id: 'family', label: 'Сім\'я',
+    title: 'Сімейний стан та діти',
+    hint: 'Сімейні обставини можуть суттєво вплинути на рішення',
+    type: 'family',
+  },
+];
+
+const D = {};
+let step = 0;
+
+function $(id) { return document.getElementById(id); }
+
+function renderTrack() {
+  const total = STEPS.length;
+  let html = '';
+  STEPS.forEach((s, i) => {
+    if (i > 0) html += '<div class="track-connector"></div>';
+    let cls = i < step ? 'done' : i === step ? 'active' : 'pending';
+    html += `<div class="track-step ${cls}">${s.label}</div>`;
+  });
+  $('track-bar').innerHTML = `<div class="track">${html}</div>`;
+}
+
+function renderStep() {
+  renderTrack();
+  if (step >= STEPS.length) { renderResult(); return; }
+  const s = STEPS[step];
+  let body = '';
+
+  if (s.type === 'single') {
+    body = `<div class="opts">${s.options.map(o => {
+      const sel = D[s.field] === o.val;
+      return `<div class="opt${sel?' selected':''}" onclick="pick('${s.field}','${o.val}')">
+        <div class="opt-radio"></div>
+        <div>
+          <div style="font-weight:500">${o.label}</div>
+          ${o.sub ? `<div style="font-size:12px;color:inherit;opacity:0.65;margin-top:1px">${o.sub}</div>` : ''}
+        </div>
+      </div>`;
+    }).join('')}</div>`;
+  }
+
+  else if (s.type === 'months') {
+    body = `
+      <div class="field-group">
+        <label class="fl">Кількість місяців легального перебування</label>
+        <input type="number" id="months_in" min="0" max="600" placeholder="напр. 30" value="${D.months||''}" oninput="D.months=+this.value">
+        <div class="field-note">Рахуйте лише місяці з легальним статусом (виза, Aufenthaltserlaubnis)</div>
+        <div class="err-msg" id="months_err">Будь ласка, введіть кількість місяців</div>
+      </div>
+      <div class="salary-bar-wrap" id="months_bar_wrap" style="display:${D.months?'block':'none'}">
+        <div style="font-size:12px;color:var(--text3);margin-bottom:4px" id="months_bar_label"></div>
+        <div class="salary-bar-track"><div class="salary-bar-fill" id="months_bar" style="width:0%"></div></div>
+        <div class="salary-labels"><span>0</span><span>21 міс (Blue Card)</span><span>60 міс</span></div>
+      </div>`;
+  }
+
+  else if (s.type === 'finance') {
+    body = `
+      <div class="field-group">
+        <label class="fl">Щомісячна брутто-зарплата (€)</label>
+        <input type="number" id="salary_in" min="0" placeholder="напр. 3500" value="${D.salary||''}" oninput="D.salary=+this.value;updateSalaryBar()">
+        <div class="salary-bar-wrap" id="sal_bar_wrap" style="margin-top:8px;display:${D.salary?'block':'none'}">
+          <div class="salary-bar-track"><div class="salary-bar-fill" id="sal_bar" style="width:0%;background:var(--red)"></div></div>
+          <div class="salary-labels"><span>€0</span><span>€1800 мін</span><span>€4532 Blue Card</span></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="fl">Тип зайнятості</label>
+        <select id="emp_in" onchange="D.employment=this.value">
+          <option value="">— оберіть —</option>
+          <option value="employed" ${D.employment==='employed'?'selected':''}>Офіційно працевлаштований(а)</option>
+          <option value="self" ${D.employment==='self'?'selected':''}>Самозайнятий / Freelancer</option>
+          <option value="business" ${D.employment==='business'?'selected':''}>Власний бізнес (GmbH / UG)</option>
+          <option value="student_work" ${D.employment==='student_work'?'selected':''}>Студентська підробітка</option>
+          <option value="unemployed" ${D.employment==='unemployed'?'selected':''}>Не працюю</option>
+          <option value="jobcenter" ${D.employment==='jobcenter'?'selected':''}>Отримую Bürgergeld / Jobcenter</option>
+        </select>
+      </div>
+      <div class="err-msg" id="fin_err">Будь ласка, заповніть обидва поля</div>`;
+  }
+
+  else if (s.type === 'multi') {
+    const sel = D[s.field] || [];
+    body = `<div class="opts">${s.options.map(o => {
+      const on = sel.includes(o.val);
+      return `<div class="opt${on?' selected':''}" onclick="toggleMulti('${s.field}','${o.val}')">
+        <div class="opt-check"></div>
+        <span>${o.label}</span>
+      </div>`;
+    }).join('')}</div>`;
+  }
+
+  else if (s.type === 'family') {
+    body = `
+      <div class="field-group">
+        <label class="fl">Сімейний стан</label>
+        <select id="marital_in" onchange="D.marital=this.value">
+          <option value="">— оберіть —</option>
+          <option value="single" ${D.marital==='single'?'selected':''}>Неодружений(а)</option>
+          <option value="married_de" ${D.marital==='married_de'?'selected':''}>Шлюб з громадянином/кою Німеччини або ЄС</option>
+          <option value="married_de_long" ${D.marital==='married_de_long'?'selected':''}>Шлюб 3+ роки з громадянином/кою DE або ЄС</option>
+          <option value="married_other" ${D.marital==='married_other'?'selected':''}>Шлюб з громадянином(кою) іншої країни</option>
+          <option value="divorced" ${D.marital==='divorced'?'selected':''}>Розлучений(а)</option>
+        </select>
+        <div class="err-msg" id="fam_err">Будь ласка, оберіть сімейний стан</div>
+      </div>
+      <div class="field-group">
+        <label class="fl">Кількість неповнолітніх дітей, які проживають у Німеччині</label>
+        <input type="number" id="children_in" min="0" max="20" placeholder="0" value="${D.children!==undefined?D.children:''}" oninput="D.children=+this.value||0">
+      </div>`;
+  }
+
+  const backBtn = step > 0 ? `<button class="btn-back" onclick="goBack()">← Назад</button>` : '';
+  const label = step < STEPS.length - 1 ? 'Далі →' : 'Отримати результат →';
+
+  $('app').innerHTML = `
+    <div class="card">
+      <p class="card-label">Крок ${step+1} з ${STEPS.length} — ${s.label}</p>
+      <h2 class="card-question">${s.title}</h2>
+      <p class="card-hint">${s.hint}</p>
+      ${body}
+    </div>
+    <div class="btns">
+      ${backBtn}
+      <button class="btn-next" onclick="goNext()">${label}</button>
+    </div>`;
+
+  if (s.type === 'months' && D.months) updateMonthsBar();
+  if (s.type === 'finance' && D.salary) updateSalaryBar();
+}
+
+function pick(field, val) { D[field] = val; renderStep(); }
+
+function toggleMulti(field, val) {
+  if (!D[field]) D[field] = [];
+  const i = D[field].indexOf(val);
+  if (i >= 0) D[field].splice(i, 1); else D[field].push(val);
+  renderStep();
+}
+
+function updateMonthsBar() {
+  const v = +($('months_in') && $('months_in').value) || D.months || 0;
+  const pct = Math.min(v / 60 * 100, 100);
+  const bar = $('months_bar'), wrap = $('months_bar_wrap'), lbl = $('months_bar_label');
+  if (bar) { bar.style.width = pct + '%'; bar.style.background = pct >= 100 ? 'var(--green)' : pct >= 35 ? 'var(--amber)' : 'var(--red)'; }
+  if (wrap) wrap.style.display = 'block';
+  if (lbl) lbl.textContent = v + ' міс. із 60 необхідних';
+}
+
+function updateSalaryBar() {
+  const v = +($('salary_in') && $('salary_in').value) || D.salary || 0;
+  const maxRef = 4532;
+  const pct = Math.min(v / maxRef * 100, 100);
+  const bar = $('sal_bar'), wrap = $('sal_bar_wrap');
+  if (bar) { bar.style.width = pct + '%'; bar.style.background = v >= 2800 ? 'var(--green)' : v >= 1800 ? 'var(--amber)' : 'var(--red)'; }
+  if (wrap) wrap.style.display = 'block';
+}
+
+function goBack() { if (step > 0) { step--; renderStep(); } }
+
+function goNext() {
+  const s = STEPS[step];
+  if (s.type === 'single' && !D[s.field]) return;
+  if (s.type === 'months') {
+    const v = parseInt($('months_in') && $('months_in').value);
+    if (isNaN(v) || v < 0) { $('months_err').style.display = 'block'; return; }
+    D.months = v;
+    $('months_err').style.display = 'none';
+  }
+  if (s.type === 'finance') {
+    if (!D.salary || !D.employment) { $('fin_err').style.display = 'block'; return; }
+    $('fin_err').style.display = 'none';
+  }
+  if (s.type === 'multi' && !D[s.field]) D[s.field] = [];
+  if (s.type === 'family') {
+    if (!D.marital) { $('fam_err').style.display = 'block'; return; }
+  }
+  step++;
+  renderStep();
+}
+
+function calcAndRender() {
+  let score = 0, maxScore = 0;
+  const factors = [], recs = [];
+
+  // STATUS (max 20)
+  maxScore += 20;
+  const sMap = { bluecardeu:20, work:17, freelance:14, family:13, student:10, humanitarian:6, jobseeker:5, tourist:0 };
+  const sScore = sMap[D.status] || 0;
+  score += sScore;
+  const sLabel = { bluecardeu:'EU Blue Card', work:'Робоча віза', freelance:'Фрілансер', family:'Возз\'єднання сім\'ї', student:'Студент', humanitarian:'§24 Тимчасовий захист', jobseeker:'Пошук роботи', tourist:'Турист' };
+  factors.push({ name:'Статус', val: sLabel[D.status]||'—', st: sScore>=15?'ok':sScore>=10?'warn':'bad' });
+  if (D.status==='tourist') recs.push({type:'warn',text:'<strong>Без статусу:</strong> Подача на ВНЖ неможлива. Спочатку необхідно отримати відповідну візу та Aufenthaltserlaubnis.'});
+  if (D.status==='humanitarian') recs.push({type:'info',text:'<strong>§24 Тимчасовий захист:</strong> Через 18–24 місяці можна подавати на звичайний Aufenthaltserlaubnis. Рекомендуємо паралельно шукати роботу для зміцнення позиції.'});
+
+  // TIME (max 20)
+  maxScore += 20;
+  const months = D.months || 0;
+  const needed = D.status==='bluecardeu' ? 21 : 60;
+  let tScore = 0;
+  if (months >= needed) tScore = 20;
+  else if (months >= needed*0.6) tScore = 12;
+  else if (months >= 12) tScore = 7;
+  else tScore = 2;
+  score += tScore;
+  factors.push({ name:'Час перебування', val:`${months} міс.`, st: tScore>=18?'ok':tScore>=10?'warn':'bad' });
+  if (months < needed) recs.push({type:'info',text:`<strong>Час перебування:</strong> Потрібно мінімум ${needed} місяців. У вас ${months}. Залишилось ще приблизно ${needed-months} міс.`});
+
+  // FINANCE (max 25)
+  maxScore += 25;
+  const sal = D.salary || 0;
+  const emp = D.employment || '';
+  let fScore = 0;
+  if (emp==='jobcenter') {
+    fScore = 0;
+    factors.push({ name:'Дохід', val:'Bürgergeld', st:'bad' });
+    recs.push({type:'warn',text:'<strong>Bürgergeld / Jobcenter:</strong> Отримання соціальної допомоги є серйозною перешкодою для ВНЖ. Потрібно знайти роботу та вийти з системи до подачі заяви.'});
+  } else if (emp==='unemployed') {
+    fScore = 0;
+    factors.push({ name:'Дохід', val:'Безробітний(а)', st:'bad' });
+    recs.push({type:'warn',text:'<strong>Відсутність доходу:</strong> Без стабільного доходу отримання ВНЖ майже неможливе. Зареєструйтеся як фрілансер або знайдіть роботу.'});
+  } else {
+    const minOk = 1800, goodSal = D.status==='bluecardeu' ? 4532 : 2800;
+    if (sal >= goodSal) fScore = 25;
+    else if (sal >= minOk) fScore = 15;
+    else fScore = 4;
+    const salSt = sal>=goodSal?'ok':sal>=minOk?'warn':'bad';
+    factors.push({ name:'Дохід', val:`€${sal.toLocaleString()}/міс`, st: salSt });
+    if (sal < goodSal) recs.push({type:'info',text:`<strong>Зарплата:</strong> Рекомендований рівень — €${goodSal}/міс брутто. У вас €${sal}. Спробуйте домовитись про підвищення або перейти на вищу позицію.`});
+    if (sal < minOk) recs.push({type:'warn',text:`<strong>Низький дохід:</strong> Мінімальний поріг — ~€${minOk}/міс брутто. Без цього Ausländerbehörde може відмовити.`});
+  }
+  score += fScore;
+
+  // LANGUAGE (max 15)
+  maxScore += 15;
+  const lMap = { none:0, a1:3, a2:6, b1:10, b2:13, c1:14, c2:15 };
+  const lScore = lMap[D.language] || 0;
+  score += lScore;
+  factors.push({ name:'Мова', val:(D.language||'').toUpperCase()||'—', st: lScore>=10?'ok':lScore>=6?'warn':'bad' });
+  if (lScore<10) recs.push({type:'warn',text:'<strong>Мова B1:</strong> Обов\'язковий мінімум для Niederlassungserlaubnis. Запишіться на курс VHS або Goethe-Institut. Сертифікат Goethe B1 є загальновизнаним.'});
+
+  // DOCS (max 20)
+  maxScore += 20;
+  const docs = D.docs || [];
+  const docW = { anmeldung:3, health_ins:4, pension:4, integration_course:5, no_criminal:5, housing:2, tax:2 };
+  let docRaw = docs.reduce((a,k)=>a+(docW[k]||0),0);
+  const docMax = Object.values(docW).reduce((a,b)=>a+b,0);
+  const dScore = Math.round(docRaw/docMax*20);
+  score += dScore;
+  factors.push({ name:'Документи', val:`${docs.length}/7 пунктів`, st: dScore>=15?'ok':dScore>=9?'warn':'bad' });
+  if (!docs.includes('anmeldung')) recs.push({type:'warn',text:'<strong>Anmeldung:</strong> Реєстрація за місцем проживання — обов\'язкова першочергова дія. Зверніться до місцевого Bürgeramt.'});
+  if (!docs.includes('health_ins')) recs.push({type:'warn',text:'<strong>Медична страховка:</strong> Обов\'язкова умова. Оформіть через TK, DAK або AOK — більшість без черги.'});
+  if (!docs.includes('integration_course')) recs.push({type:'info',text:'<strong>Integrationskurs:</strong> Зараховується як позитивний фактор. Запишіться через портал BAMF — курс часто безкоштовний для власників §24.'});
+  if (!docs.includes('no_criminal')) recs.push({type:'warn',text:'<strong>Кримінальна історія:</strong> Судимості або порушення суттєво ускладнюють або унеможливлюють отримання ВНЖ. Проконсультуйтесь з адвокатом.'});
+
+  // FAMILY (max 14)
+  maxScore += 14;
+  const marital = D.marital || '';
+  const children = D.children || 0;
+  let famScore = 0;
+  if (marital==='married_de_long') famScore += 8;
+  else if (marital==='married_de') famScore += 4;
+  famScore += Math.min(children * 2, 6);
+  score += famScore;
+  const mLabel = { single:'Неодружений(а)', married_de:'Шлюб з гром. DE/ЄС', married_de_long:'Шлюб 3+ р. DE/ЄС', married_other:'Шлюб з іноземцем', divorced:'Розлучений(а)' };
+  factors.push({ name:'Сім\'я', val:(mLabel[marital]||'—')+(children>0?` · ${children} діт.`:''), st: famScore>=6?'ok':famScore>=2?'warn':'bad' });
+  if (marital==='married_de') recs.push({type:'info',text:'<strong>Шлюб з громадянином(кою) DE/ЄС:</strong> Після 3 років шлюбу ви маєте право на самостійний ВНЖ (§31 AufenthG), навіть без 5 років проживання.'});
+
+  // SCORE
+  const pct = Math.round(score / maxScore * 100);
+
+  // PERM TYPE
+  let permType = '';
+  if (D.status==='bluecardeu' && months>=21 && lScore>=6) permType='Niederlassungserlaubnis (EU Blue Card track)';
+  else if (D.status==='work' && months>=60 && lScore>=10) permType='Niederlassungserlaubnis §9 AufenthG';
+  else if (marital==='married_de_long' && months>=36) permType='Eigenständiges Aufenthaltsrecht §31 AufenthG';
+  else if (D.status==='work' || D.status==='freelance') permType='Aufenthaltserlaubnis zur Erwerbstätigkeit';
+  else if (D.status==='student') permType='Aufenthaltserlaubnis zur Ausbildung';
+  else if (D.status==='humanitarian') permType='Aufenthaltserlaubnis §24 / §25 AufenthG';
+  else permType='Aufenthaltserlaubnis (тип за підставою)';
+
+  let verdict='', vsub='', vcol='', ringCol='';
+  if (pct>=75) { verdict='Високі шанси'; vsub='Ваш профіль сильний — готуйте документи для подачі'; vcol='#1a7a4a'; ringCol='#1a7a4a'; }
+  else if (pct>=55) { verdict='Середні шанси'; vsub='Є позитивна динаміка, але є що вдосконалити'; vcol='#d4a200'; ringCol='#d4a200'; }
+  else if (pct>=30) { verdict='Низькі шанси'; vsub='Потрібно усунути кілька ключових перешкод'; vcol='#CC0000'; ringCol='#CC0000'; }
+  else { verdict='Зараз зарано подавати'; vsub='Спочатку вирішіть критичні питання зі списку нижче'; vcol='#991111'; ringCol='#CC0000'; }
+
+  if (pct>=75) recs.unshift({type:'ok',text:'<strong>Загальна оцінка:</strong> Ваш профіль виглядає сильно. Зверніться безпосередньо до Ausländerbehörde вашого міста або до імміграційного адвоката для підготовки заяви.'});
+
+  // SVG ring
+  const R=58, CX=75, CY=75, circ=2*Math.PI*R;
+  const dash=(pct/100)*circ;
+
+  const facHtml = factors.map(f=>`
+    <div class="factor ${f.st}">
+      <div class="factor-name">${f.name}</div>
+      <div class="factor-val">${f.val}</div>
+    </div>`).join('');
+
+  const recHtml = recs.length === 0
+    ? '<p style="font-size:14px;color:var(--text2)">Все виглядає добре! Готуйте пакет документів та записуйтесь на прийом до Ausländerbehörde.</p>'
+    : recs.map(r=>`
+      <div class="rec ${r.type}">
+        <div class="rec-dot">${r.type==='warn'?'!':r.type==='ok'?'✓':'i'}</div>
+        <div class="rec-text">${r.text}</div>
+      </div>`).join('');
+
+  $('track-bar').innerHTML = '<div class="track"><div class="track-step active" style="flex:unset;padding:0 16px">Результат</div></div>';
+
+  $('app').innerHTML = `
+    <div class="result-hero">
+      <svg class="score-ring-svg" width="150" height="150" viewBox="0 0 150 150">
+        <circle cx="${CX}" cy="${CY}" r="${R}" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="12"/>
+        <circle cx="${CX}" cy="${CY}" r="${R}" fill="none" stroke="${ringCol}" stroke-width="12"
+          stroke-dasharray="${dash.toFixed(1)} ${circ.toFixed(1)}"
+          stroke-dashoffset="${(circ*0.25).toFixed(1)}"
+          stroke-linecap="round" transform="rotate(-90 ${CX} ${CY})"/>
+        <text x="${CX}" y="${CY-4}" text-anchor="middle" font-size="32" font-weight="700"
+          fill="${ringCol}" font-family="DM Sans, sans-serif">${pct}%</text>
+        <text x="${CX}" y="${CY+16}" text-anchor="middle" font-size="11"
+          fill="rgba(255,255,255,0.4)" font-family="DM Sans, sans-serif">готовність</text>
+      </svg>
+      <div class="result-verdict" style="color:${vcol}">${verdict}</div>
+      <div class="result-sub">${vsub}</div>
+      <div class="perm-badge">${permType}</div>
+    </div>
+
+    <div class="card">
+      <p class="card-label">Аналіз по факторах</p>
+      <div class="factors-grid">${facHtml}</div>
+    </div>
+
+    <div class="recs-section">
+      <h3 class="recs-title">Рекомендації</h3>
+      ${recHtml}
+    </div>
+
+    <button class="restart-btn" onclick="restart()">← Заповнити знову</button>`;
+}
+
+function renderResult() { calcAndRender(); }
+
+function restart() {
+  Object.keys(D).forEach(k => delete D[k]);
+  step = 0;
+  renderStep();
+}
+
+renderStep();
+</script>
+</body>
+</html>
