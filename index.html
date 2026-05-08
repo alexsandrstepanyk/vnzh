@@ -14,11 +14,6 @@
 <meta name="author" content="VNJ Rechner">
 <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <meta name="googlebot" content="index, follow">
-<meta property="og:title" content="ВНЖ Калькулятор Німеччина 2026">
-<meta property="og:description" content="Дізнайтеся свої шанси на отримання Aufenthaltserlaubnis або Niederlassungserlaubnis за 6 кроків.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://alexsandrstepanyk.github.io/vnzh/">
-<meta property="og:image" content="https://images.unsplash.com/photo-1527866959252-deab85ef7d1b?auto=format&fit=crop&w=1200&q=80">
 <link rel="canonical" href="https://YOUR_DOMAIN/">
 
 <!-- ═══════════════════════════════════════════════════════
@@ -537,38 +532,6 @@ footer strong{color:rgba(255,255,255,0.45)}
     Результати не є юридичною консультацією і не гарантують жодного рішення органів влади.<br>
     Для офіційної консультації зверніться до <strong>Ausländerbehörde</strong> або <strong>Fachanwalt für Migrationsrecht</strong>.
   </p>
-
-  <!-- AUTHOR BLOCK -->
-  <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.07);display:flex;flex-direction:column;align-items:center;gap:10px">
-    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center">
-      <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:30px;padding:6px 14px 6px 8px">
-        <div style="width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#CC0000,#FFCE00);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0">S</div>
-        <span style="font-size:12px;font-weight:600;color:rgba(255,255,255,0.75)">Розроблено Stepaniuk Oleksandr</span>
-      </div>
-      <a href="https://stepaniuk.shop" target="_blank" rel="noopener"
-        style="display:flex;align-items:center;gap:6px;background:rgba(255,206,0,0.1);border:1px solid rgba(255,206,0,0.25);border-radius:30px;padding:6px 14px;text-decoration:none;transition:all .15s"
-        onmouseover="this.style.background='rgba(255,206,0,0.18)'" onmouseout="this.style.background='rgba(255,206,0,0.1)'">
-        <span style="font-size:13px">🌐</span>
-        <span style="font-size:12px;font-weight:700;color:#FFCE00;font-family:'JetBrains Mono',monospace">stepaniuk.shop</span>
-      </a>
-    </div>
-    <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:center">
-      <a href="https://deutsch-b1-app.onrender.com" target="_blank" rel="noopener"
-        style="display:flex;align-items:center;gap:6px;text-decoration:none;transition:opacity .15s"
-        onmouseover="this.style.opacity='.75'" onmouseout="this.style.opacity='1'">
-        <span style="font-size:14px">🇩🇪</span>
-        <span style="font-size:11px;color:rgba(255,255,255,0.45);font-weight:500">Deutsch B1 Übungstests</span>
-      </a>
-      <span style="color:rgba(255,255,255,0.15);font-size:11px">·</span>
-      <span style="font-size:11px;color:rgba(255,255,255,0.25)">ВНЖ Калькулятор 2025</span>
-      <span style="color:rgba(255,255,255,0.15);font-size:11px">·</span>
-      <span style="font-size:11px;color:rgba(255,255,255,0.25)">Anerkennung Rechner</span>
-    </div>
-    <p style="font-size:10px;color:rgba(255,255,255,0.18);text-align:center;line-height:1.7;max-width:500px">
-      Правова база: AufenthG · BQFG · SGB II/VI · BMG · VVG · StAG · KMK · EU-Richtlinie 2005/36/EG<br>
-      Версія 2025 · <a href="https://stepaniuk.shop" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.3);text-decoration:none">© Stepaniuk Oleksandr</a>
-    </p>
-  </div>
 </footer>
 
 <script>
@@ -1735,505 +1698,293 @@ function updateSalBar() {
 // ═══════════════════════════════════════════
 // SCORING ENGINE
 // ═══════════════════════════════════════════
-// ═══════════════════════════════════════════
-// SCORING ENGINE — перевірено по AufenthG 2024/2025
-// Джерела: AufenthG, BQFG, SGB II, SGB VI, BMG, VVG, StAG
-// ═══════════════════════════════════════════
 function calcScore() {
   const L = t();
   let score = 0, maxScore = 0;
   const factors = [];
   const recKeys = [];
-  const months = D.months || 0;
-  const docs = D.docs || [];
-  const sal = D.salary || 0;
-  const emp = D.employment || '';
-  const langScore = {none:0,a1:3,a2:6,b1:10,b2:13,c1:14,c2:15};
-  const ls = langScore[D.language] || 0;
 
-  // 1. STATUS (max 20) — AufenthG §18,§18c,§21,§16b,§24,§25,§25b
+  // 1. STATUS (max 20)
   maxScore += 20;
-  const statusScore = {
-    bluecardeu:20, work:18, fachkraft:18, freelance:14,
-    student:11, family:13, para24:8, asylum_ok:15,
-    asylum_pend:3, para25b:9, duldung:2, chancenkarte:11, jobseeker:9, none:0
-  };
-  const ss = statusScore[D.status] || 0;
+  const statusScore = {bluecardeu:20,work:18,fachkraft:18,freelance:15,student:12,family:13,para24:8,asylum_ok:14,asylum_pend:4,para25b:10,duldung:3,chancenkarte:12,jobseeker:10,none:0};
+  const ss = statusScore[D.status]||0;
   score += ss;
   const sLabel = (L.statusOpts.find(o=>o.v===D.status)||{l:'—'}).l;
-  factors.push({n:L.stepNames[0], v:sLabel, st:ss>=15?'ok':ss>=8?'warn':'bad'});
+  factors.push({n:L.stepNames[0],v:sLabel,st:ss>=15?'ok':ss>=8?'warn':'bad'});
   if (D.status==='none') recKeys.push('no_status');
   if (D.status==='para24') recKeys.push('para24_tip');
   if (D.status==='asylum_pend') recKeys.push('asylum_pend_tip');
-  if (D.status==='duldung') recKeys.push('duldung_tip');
-  if (D.status==='para25b') recKeys.push('para25b_path');
+  if (D.status==='duldung'||D.status==='para25b') recKeys.push('duldung_tip');
   if (D.status==='bluecardeu') recKeys.push('blue_card');
   if (D.status==='fachkraft') recKeys.push('fachkraft');
   if (D.status==='chancenkarte') recKeys.push('chancenkarte');
 
-  // 2. ЧАС (max 18) — §9(60міс), §18c(21/33міс), §26 Abs.3(36міс GFK!), §25b(96/72міс)
+  // 2. TIME (max 18)
   maxScore += 18;
-  let neededMonths = 60;
-  if (D.status==='bluecardeu') neededMonths = ls>=6 ? 21 : 33;
-  if (D.status==='asylum_ok') neededMonths = 36;
-  if (D.status==='duldung'||D.status==='para25b') neededMonths = (D.children||0)>0 ? 72 : 96;
-  if (D.status==='family'&&D.marital==='married_de_long') neededMonths = 36;
+  const months = D.months||0;
+  const needed = D.status==='bluecardeu'?21:60;
   let ts = 0;
-  if (months>=neededMonths) ts=18;
-  else if (months>=neededMonths*0.65) ts=12;
-  else if (months>=12) ts=7;
-  else ts=2;
+  if (months>=needed) ts=18; else if (months>=needed*.65) ts=12; else if (months>=12) ts=7; else ts=2;
   score += ts;
-  factors.push({n:L.stepNames[1], v:months+' / '+neededMonths+' міс.', st:ts>=16?'ok':ts>=10?'warn':'bad'});
-  if (months<neededMonths) recKeys.push('time_short');
+  factors.push({n:L.stepNames[1],v:`${months} Monate / міс.`,st:ts>=16?'ok':ts>=10?'warn':'bad'});
+  if (months<needed) recKeys.push('time_short');
 
-  // 3. ФІНАНСИ (max 22) — §2 Abs.3 AufenthG
+  // 3. FINANCE (max 22)
   maxScore += 22;
+  const sal = D.salary||0; const emp = D.employment||'';
   let fs = 0;
   if (emp==='jobcenter') { fs=0; recKeys.push('jobcenter'); }
   else if (emp==='unemployed') { fs=1; recKeys.push('jobcenter'); }
-  else {
-    if (sal>=3775) fs=22; // Blue Card поріг
-    else if (sal>=3000) fs=20;
-    else if (sal>=2200) fs=16;
-    else if (sal>=1700) fs=11;
-    else if (sal>=1200) fs=6;
-    else fs=2;
-  }
+  else { if (sal>=3500) fs=22; else if (sal>=2000) fs=16; else if (sal>=1400) fs=9; else fs=3; }
   score += fs;
-  const finLabel = emp==='jobcenter'?'Bürgergeld':emp==='unemployed'?'—':'€'+sal+'/Mo.';
-  factors.push({n:L.stepNames[2], v:finLabel, st:fs>=16?'ok':fs>=10?'warn':'bad'});
-  if (sal<2200&&emp!=='jobcenter'&&emp!=='unemployed'&&sal>0) recKeys.push('salary_low');
+  const finLabel = emp==='jobcenter'?'Bürgergeld':emp==='unemployed'?'—':`€${sal}/Mo.`;
+  factors.push({n:L.stepNames[2],v:finLabel,st:fs>=16?'ok':fs>=8?'warn':'bad'});
+  if (sal<2000 && emp!=='jobcenter' && emp!=='unemployed' && sal>0) recKeys.push('salary_low');
   recKeys.push('shortage_prof');
 
-  // 4. ОСВІТА (max 14) — Anerkennungsgesetz, §18c Abs.1 Nr.2
+  // 4. EDUCATION (max 14)
   maxScore += 14;
-  const eduScore2 = {recog_de:14,degree_eu:13,recog_proc:10,vocational:10,studying:8,degree_foreign:5,no_degree:2};
-  const es = eduScore2[D.edu] || 0;
+  const eduScore = {recog_de:14,degree_eu:13,recog_proc:10,vocational:10,studying:9,degree_foreign:6,no_degree:3};
+  const es = eduScore[D.edu]||0;
   score += es;
   const eduLabel = (L.eduOpts.find(o=>o.v===D.edu)||{l:'—'}).l;
-  factors.push({n:L.stepNames[3], v:eduLabel, st:es>=12?'ok':es>=8?'warn':'bad'});
-  if (D.edu==='degree_foreign'||D.edu==='no_degree') recKeys.push('edu_recog');
+  factors.push({n:L.stepNames[3],v:eduLabel,st:es>=12?'ok':es>=8?'warn':'bad'});
+  if (D.edu==='degree_foreign') recKeys.push('edu_recog');
 
-  // 5. МОВА (max 15) — §9 Abs.2 Nr.7(B1), §25b Abs.1 Nr.4(A2 усно), §18c(B1=21міс)
+  // 5. LANGUAGE (max 15)
   maxScore += 15;
+  const langScore = {none:0,a1:3,a2:6,b1:10,b2:13,c1:14,c2:15};
+  const ls = langScore[D.language]||0;
   score += ls;
-  factors.push({n:L.stepNames[4], v:(D.language||'').toUpperCase()||'—', st:ls>=10?'ok':ls>=6?'warn':'bad'});
-  if (ls<6) recKeys.push('lang_low');
-  else if (ls<10) recKeys.push('lang_improve');
+  const langLabel = (D.language||'').toUpperCase();
+  factors.push({n:L.stepNames[4],v:langLabel||'—',st:ls>=10?'ok':ls>=6?'warn':'bad'});
+  if (ls<10) recKeys.push('lang_low');
+  else if (ls<13) recKeys.push('lang_improve');
 
-  // 6. ДОКУМЕНТИ (max 16) — §5 AufenthG, §17 BMG, §193 VVG, §9 Abs.2 Nr.3
+  // 6. DOCUMENTS (max 16)
   maxScore += 16;
-  const docW = {anmeldung:3,health:3,pension:2,integration:3,no_social:2,housing:1,tax:1,pension60:3,civic:1};
-  const docRaw = docs.reduce((a,k)=>a+(docW[k]||0), 0);
-  const docMax = Object.values(docW).reduce((a,b)=>a+b, 0);
+  const docs = D.docs||[];
+  const docW = {anmeldung:3,health:3,pension:3,integration:3,no_social:2,housing:1,tax:1,pension60:3,civic:1};
+  const docRaw = docs.reduce((a,k)=>a+(docW[k]||0),0);
+  const docMax = Object.values(docW).reduce((a,b)=>a+b,0);
   const ds = Math.round(docRaw/docMax*16);
   score += ds;
-  factors.push({n:L.stepNames[5], v:docs.length+'/9', st:ds>=12?'ok':ds>=7?'warn':'bad'});
+  factors.push({n:L.stepNames[5],v:`${docs.length}/9`,st:ds>=12?'ok':ds>=7?'warn':'bad'});
   if (!docs.includes('anmeldung')) recKeys.push('no_anmeldung');
   if (!docs.includes('health')) recKeys.push('no_health');
   if (!docs.includes('integration')) recKeys.push('get_integration');
-  if (!docs.includes('pension60')&&['work','fachkraft','bluecardeu','freelance'].includes(D.status)) recKeys.push('pension_check');
+  if (!docs.includes('pension60')) recKeys.push('pension_check');
 
-  // 7. ПРАВО (max 10) — §5 Abs.1 Nr.2, §54, §55, §9 Abs.2 Nr.4 AufenthG
+  // 7. LEGAL (max 10)
   maxScore += 10;
-  const legalScore2 = {clean:10,minor_admin:9,criminal_closed:8,rejected:5,overstay:4,criminal_conviction:1,deportation:0};
-  const legS = legalScore2[D.legal] || 5;
+  const legalScore = {clean:10,minor_admin:9,criminal_closed:7,overstay:4,criminal_conviction:1,deportation:0,rejected:5};
+  const legS = legalScore[D.legal]||5;
   score += legS;
   const legalLabel = (L.legalOpts.find(o=>o.v===D.legal)||{l:'—'}).l;
-  factors.push({n:L.stepNames[6], v:legalLabel, st:legS>=9?'ok':legS>=5?'warn':'bad'});
+  factors.push({n:L.stepNames[6],v:legalLabel,st:legS>=9?'ok':legS>=5?'warn':'bad'});
   if (D.legal==='overstay') recKeys.push('legal_overstay');
   if (D.legal==='criminal_conviction') recKeys.push('legal_conviction');
   if (D.legal==='deportation') recKeys.push('legal_deportation');
-  if (D.legal==='rejected') recKeys.push('legal_rejected');
 
-  // 8. СІМ'Я БОНУС (max 5) — §28(подружжя громадянина DE), §31(3р.шлюб+3р.перебування), §32(діти)
+  // 8. FAMILY BONUS (max 5)
   maxScore += 5;
   let famB = 0;
   if (D.marital==='married_de_long') famB=5;
   else if (D.marital==='married_de') famB=3;
-  famB += Math.min(D.children||0, 2);
-  famB = Math.min(famB, 5);
+  famB += Math.min((D.children||0)*1,2);
+  famB = Math.min(famB,5);
   score += famB;
-  const marRef = {single:'—',married_de:'§28',married_de_long:'§31',married_other:'§29',divorced:'—'};
-  factors.push({n:L.stepNames[7], v:(marRef[D.marital]||'—')+((D.children||0)>0?' +'+D.children+'дітей':''), st:famB>=4?'ok':famB>=2?'warn':'bad'});
+  const marLabel = (LANGS[lang].steps[7]&&D.marital)?D.marital:'—';
+  factors.push({n:L.stepNames[7],v:D.children>0?`+${D.children}`:marLabel,st:famB>=4?'ok':famB>=2?'warn':'bad'});
   if (D.marital==='married_de'||D.marital==='married_de_long') recKeys.push('family_bonus');
 
+  // Dedupe recs
   const uniqueRecs = [...new Set(recKeys)];
+
   const pct = Math.round(score/maxScore*100);
 
-  // PATHWAY — точні правові підстави
-  let pathway = '', pathKey = '';
-  if (D.status==='bluecardeu'&&months>=(ls>=6?21:33)) {
-    pathway='Niederlassungserlaubnis §18c Abs.2 AufenthG'; pathKey='bc_ne';
-  } else if (D.status==='bluecardeu') {
-    pathway='EU Blue Card §18c → Niederlassungserlaubnis'; pathKey='bc';
-  } else if (D.status==='asylum_ok'&&months>=36) {
-    pathway='Niederlassungserlaubnis §26 Abs.3 AufenthG'; pathKey='asylum_ne';
-  } else if (D.status==='asylum_ok') {
-    pathway='§25 Abs.1/2 → Niederlassungserlaubnis §26 Abs.3 (3р.!)'; pathKey='asylum';
-  } else if ((D.status==='work'||D.status==='fachkraft')&&months>=60&&docs.includes('pension60')&&ls>=10) {
-    pathway='Niederlassungserlaubnis §9 AufenthG'; pathKey='ne9';
-  } else if (D.marital==='married_de_long'&&months>=36) {
-    pathway='Eigenständiges Aufenthaltsrecht §31 AufenthG'; pathKey='para31';
-  } else if (D.marital==='married_de') {
-    pathway='§28 → §31 → §9 AufenthG'; pathKey='para28';
-  } else if (D.status==='work'||D.status==='fachkraft') {
-    pathway='Aufenthaltserlaubnis §18 → Niederlassungserlaubnis §9'; pathKey='work';
-  } else if (D.status==='para24') {
-    pathway='§24 → §18 → §9 AufenthG'; pathKey='para24';
-  } else if (D.status==='duldung') {
-    pathway='Duldung → §25b AufenthG → §9 NE'; pathKey='duldung';
-  } else if (D.status==='para25b') {
-    pathway='§25b AufenthG → §9 Niederlassungserlaubnis'; pathKey='para25b_path';
-  } else if (D.status==='student') {
-    pathway='§16b AufenthG → §20(Jobsuche) → §18 → §9'; pathKey='student';
-  } else if (D.status==='freelance') {
-    pathway='§21 AufenthG (Selbstständige) → §9 NE'; pathKey='freelance';
-  } else if (D.status==='family') {
-    pathway='§27/§29 Familiennachzug → §31 → §9'; pathKey='family';
-  } else if (D.status==='chancenkarte') {
-    pathway='§20a Chancenkarte → §18/§18c → §9'; pathKey='chance';
-  } else {
-    pathway='Aufenthaltserlaubnis — індивідуальний шлях'; pathKey='generic';
-  }
+  // Pathway recommendation
+  let pathway = '';
+  if (D.status==='bluecardeu'&&months>=21&&ls>=6) pathway='Niederlassungserlaubnis (EU Blue Card — §18c)';
+  else if ((D.status==='work'||D.status==='fachkraft')&&months>=60&&ls>=10) pathway='Niederlassungserlaubnis §9 AufenthG';
+  else if (D.marital==='married_de_long'&&months>=36) pathway='Eigenständiges Aufenthaltsrecht §31 AufenthG';
+  else if (D.status==='bluecardeu') pathway='EU Blue Card → Niederlassungserlaubnis';
+  else if (D.status==='work'||D.status==='fachkraft') pathway='Aufenthaltserlaubnis §18 (Verlängerung → §9)';
+  else if (D.status==='para24') pathway='§24 → §18 / §25 AufenthG';
+  else if (D.status==='asylum_ok') pathway='§25 AufenthG → §26 Abs. 3';
+  else if (D.status==='para25b'||D.status==='duldung') pathway='§25b AufenthG';
+  else if (D.status==='student') pathway='§16 AufenthG → §18 (nach Abschluss)';
+  else if (D.status==='family') pathway='Familiennachzug §27 → §31 / §9';
+  else pathway='Aufenthaltserlaubnis (Grundtyp nach Status)';
 
+  // Verdict
   const vi = pct>=80?4:pct>=62?3:pct>=45?2:pct>=28?1:0;
   const [vTitle, vSub] = L.ui.verdicts[vi];
-  const vColor = pct>=80?'#186640':pct>=62?'#8a5000':pct>=45?'#CC4400':'#CC0000';
+  const vColor = pct>=80?'#1a8a50':pct>=62?'#d4a200':pct>=45?'#CC6600':'#CC0000';
+  const ringColor = vColor;
+
   if (pct>=70) uniqueRecs.unshift('ready');
 
-  return {pct, score, maxScore, factors, recs:uniqueRecs, pathway, pathKey, vTitle, vSub, vColor, months, ls, sal, emp, docs, legS};
+  return {pct, score, maxScore, factors, recs: uniqueRecs, pathway, vTitle, vSub, vColor, ringColor};
 }
 
 function renderResult() {
   const L = t();
-  const res = calcScore();
-  const {pct,factors,recs,pathway,pathKey,vTitle,vSub,vColor,months,ls,sal,emp,docs,legS} = res;
+  const {pct, factors, recs, pathway, vTitle, vSub, vColor, ringColor} = calcScore();
+
   const R=58,CX=75,CY=75,circ=2*Math.PI*R;
   const dash=(pct/100)*circ;
 
   const factHtml = factors.map(f=>
-    '<div class="fact '+f.st+'"><div class="fact-n">'+f.n+'</div><div class="fact-v">'+f.v+'</div></div>').join('');
+    `<div class="fact ${f.st}">
+      <div class="fact-n">${f.n}</div>
+      <div class="fact-v">${f.v}</div>
+    </div>`).join('');
 
   const recHtml = recs.length===0
-    ? '<p style="font-size:13px;color:var(--tx2)">'+L.ui.noRecs+'</p>'
+    ? `<p style="font-size:13px;color:var(--tx2)">${L.ui.noRecs}</p>`
     : recs.map(k=>{
-        const text=L.recs[k]; if(!text) return '';
-        const p=k==='no_status'||k==='no_anmeldung'||k==='legal_conviction'||k==='legal_deportation'?'p1':
-                 k==='jobcenter'||k==='lang_low'||k==='legal_overstay'||k==='no_health'||k==='salary_low'?'p2':
-                 k==='ready'||k==='blue_card'||k==='fachkraft'||k==='family_bonus'?'p4':'p3';
-        const dot=p==='p1'?'⛔':p==='p2'?'!':p==='p4'?'✓':'i';
-        return '<div class="rec '+p+'"><div class="rDot">'+dot+'</div><div class="rText">'+text+'</div></div>';
+        const text = L.recs[k];
+        if (!text) return '';
+        const priority = k==='no_status'||k==='no_anmeldung'||k==='legal_conviction'||k==='legal_deportation'?'p1':
+                         k==='jobcenter'||k==='lang_low'||k==='salary_low'||k==='legal_overstay'||k==='no_health'?'p2':
+                         k==='ready'||k==='blue_card'||k==='fachkraft'||k==='family_bonus'?'p4':'p3';
+        const dot = priority==='p1'?'⛔':priority==='p2'?'!':priority==='p4'?'✓':'i';
+        return `<div class="rec ${priority}"><div class="rDot">${dot}</div><div class="rText">${text}</div></div>`;
       }).filter(Boolean).join('');
 
-  const pathHtml = buildPathSteps(pathKey);
-  const reportHtml = buildPersonalReport(res);
+  const pathSteps = buildPathSteps(pathway);
 
-  return '<div class="page">'+renderDisclaimerBanner()+
-    '<div class="rHero"><svg width="150" height="150" viewBox="0 0 150 150" style="display:block;margin:0 auto 0.85rem">'+
-    '<circle cx="'+CX+'" cy="'+CY+'" r="'+R+'" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="12"/>'+
-    '<circle cx="'+CX+'" cy="'+CY+'" r="'+R+'" fill="none" stroke="'+vColor+'" stroke-width="12"'+
-    ' stroke-dasharray="'+dash.toFixed(1)+' '+circ.toFixed(1)+'"'+
-    ' stroke-dashoffset="'+(circ*0.25).toFixed(1)+'"'+
-    ' stroke-linecap="round" transform="rotate(-90 '+CX+' '+CY+')"/>'+
-    '<text x="'+CX+'" y="'+(CY-4)+'" text-anchor="middle" font-size="30" font-weight="700" fill="'+vColor+'" font-family="Outfit,sans-serif">'+pct+'%</text>'+
-    '<text x="'+CX+'" y="'+(CY+15)+'" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.35)" font-family="Outfit,sans-serif">'+L.ui.readiness+'</text></svg>'+
-    '<div class="rVerdict" style="color:'+vColor+'">'+vTitle+'</div>'+
-    '<div class="rSub">'+vSub+'</div>'+
-    '<div class="permBadge">'+pathway+'</div></div>'+
-    '<div class="card"><p class="cLabel">'+L.ui.factorsTitle+'</p><div class="factGrid">'+factHtml+'</div></div>'+
-    '<div class="pathCard"><p class="pathTitle">'+L.ui.pathTitle+' <span class="pathBadge">'+pathway.split('→')[0].trim()+'</span></p>'+pathHtml+'</div>'+
-    '<div class="recsSec"><p class="recsTitle">'+L.ui.recsTitle+'</p>'+recHtml+'</div>'+
-    reportHtml+
-    '<button class="restartBtn" onclick="restart()">'+L.ui.restart+'</button></div>';
+  return `<div class="page">
+    ${renderDisclaimerBanner()}
+    <div class="rHero">
+      <svg width="150" height="150" viewBox="0 0 150 150" style="display:block;margin:0 auto 0.85rem;position:relative">
+        <circle cx="${CX}" cy="${CY}" r="${R}" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="12"/>
+        <circle cx="${CX}" cy="${CY}" r="${R}" fill="none" stroke="${ringColor}" stroke-width="12"
+          stroke-dasharray="${dash.toFixed(1)} ${circ.toFixed(1)}"
+          stroke-dashoffset="${(circ*0.25).toFixed(1)}"
+          stroke-linecap="round" transform="rotate(-90 ${CX} ${CY})"/>
+        <text x="${CX}" y="${CY-4}" text-anchor="middle" font-size="30" font-weight="700"
+          fill="${ringColor}" font-family="Outfit,sans-serif">${pct}%</text>
+        <text x="${CX}" y="${CY+15}" text-anchor="middle" font-size="10"
+          fill="rgba(255,255,255,0.35)" font-family="Outfit,sans-serif">${L.ui.readiness}</text>
+      </svg>
+      <div class="rVerdict" style="color:${vColor}">${vTitle}</div>
+      <div class="rSub">${vSub}</div>
+      <div class="permBadge">${pathway}</div>
+    </div>
+
+    <div class="card">
+      <p class="cLabel">${L.ui.factorsTitle}</p>
+      <div class="factGrid">${factHtml}</div>
+    </div>
+
+    <div class="pathCard">
+      <p class="pathTitle">${L.ui.pathTitle} <span class="pathBadge">${pathway.split(' ')[0]}</span></p>
+      ${pathSteps}
+    </div>
+
+    <div class="recsSec">
+      <p class="recsTitle">${L.ui.recsTitle}</p>
+      ${recHtml}
+    </div>
+
+    <button class="restartBtn" onclick="restart()">${L.ui.restart}</button>
+  </div>`;
 }
 
-function buildPersonalReport(res) {
-  const {docs,ls,sal,emp,legS,months,pathKey,pct} = res;
-  const today = new Date().toLocaleDateString('uk-UA');
-
-  // ── обчислюємо neededMonths тут, щоб не залежати від calcScore scope ──
-  let neededMonths = 60;
-  if (D.status==='bluecardeu') neededMonths = ls>=6 ? 21 : 33;
-  if (D.status==='asylum_ok') neededMonths = 36;
-  if (D.status==='duldung'||D.status==='para25b') neededMonths = (D.children||0)>0 ? 72 : 96;
-  if (D.status==='family'&&D.marital==='married_de_long') neededMonths = 36;
-
-  const lbl = {
-    title: lang==='de'?'Ihr persönlicher Statusbericht':lang==='en'?'Your Personal Status Report':lang==='tr'?'Kişisel Durum Raporunuz':lang==='ar'?'تقريرك الشخصي':lang==='pl'?'Twój osobisty raport':lang==='ru'?'Ваш персональный отчёт':lang==='ro'?'Raportul dvs. personal':'Ваш особистий звіт про стан готовності',
-    done: lang==='de'?'✅ Bereits erledigt':lang==='en'?'✅ Already done':lang==='ar'?'✅ تم':lang==='tr'?'✅ Tamamlananlar':lang==='pl'?'✅ Już wykonane':lang==='ru'?'✅ Уже сделано':lang==='ro'?'✅ Realizat':'✅ Вже виконано',
-    block: lang==='de'?'🚫 Kritische Hindernisse':lang==='en'?'🚫 Critical Blockers':lang==='ar'?'🚫 عوائق حرجة':lang==='tr'?'🚫 Kritik Engeller':lang==='pl'?'🚫 Blokady krytyczne':lang==='ru'?'🚫 Критические блокеры':lang==='ro'?'🚫 Blocante critice':'🚫 Критичні блокери',
-    todo: lang==='de'?'📋 Noch zu erledigen':lang==='en'?'📋 Still to do':lang==='ar'?'📋 ما يجب فعله':lang==='tr'?'📋 Yapılacaklar':lang==='pl'?'📋 Do zrobienia':lang==='ru'?'📋 Предстоит сделать':lang==='ro'?'📋 De făcut':'📋 Ще потрібно зробити',
-    disc: lang==='de'?'⚠ Einschätzung, keine Garantie. Jede Ausländerbehörde entscheidet nach eigenem Ermessen (§§ 5, 27 AufenthG).':lang==='en'?'⚠ Assessment only, not a guarantee. Each Ausländerbehörde decides individually (§§ 5, 27 AufenthG).':'⚠ Це оцінка на основі чинного законодавства, а НЕ юридична консультація і НЕ гарантія. Ausländerbehörde вирішує індивідуально за §§ 5, 27 AufenthG. Результати можуть відрізнятись залежно від федеральної землі та конкретного Sachbearbeiter. Зверніться до Fachanwalt für Migrationsrecht для офіційної консультації.',
-    immed: lang==='de'?'⚡ Sofort':lang==='en'?'⚡ Immediately':lang==='ar'?'⚡ فوراً':lang==='tr'?'⚡ Acil':lang==='pl'?'⚡ Natychmiast':lang==='ru'?'⚡ Срочно':'⚡ Негайно',
-    short: lang==='de'?'📅 1–3 Monate':lang==='en'?'📅 1–3 months':lang==='ar'?'📅 1–3 أشهر':lang==='tr'?'📅 1–3 ay':lang==='pl'?'📅 1–3 miesiące':lang==='ru'?'📅 1–3 месяца':'📅 1–3 місяці',
-    mid: lang==='de'?'🗓 3–12 Monate':lang==='en'?'🗓 3–12 months':lang==='ar'?'🗓 3–12 شهراً':lang==='tr'?'🗓 3–12 ay':lang==='pl'?'🗓 3–12 miesięcy':lang==='ru'?'🗓 3–12 месяцев':'🗓 3–12 місяців',
-    long: lang==='de'?'⏳ 1–5 Jahre':lang==='en'?'⏳ 1–5 years':lang==='ar'?'⏳ 1–5 سنوات':lang==='tr'?'⏳ 1–5 yıl':lang==='pl'?'⏳ 1–5 lat':lang==='ru'?'⏳ 1–5 лет':'⏳ 1–5 років'
+function buildPathSteps(pathway) {
+  const L = t();
+  const lang_code = lang;
+  const steps = {
+    bluecardeu: {
+      de:[
+        ['Anerkannten Hochschulabschluss beschaffen','anabin.kmk.org prüfen, Antrag bei zuständiger Kammer stellen','3–6 Monate'],
+        ['Arbeitgeber mit Gehalt €45.300+/Jahr finden','(oder €35.300 für Mangelberufe wie IT, Medizin, Ingenieurwesen)','variabel'],
+        ['EU Blue Card (§18c) beantragen','bei der Ausländerbehörde oder deutschen Botschaft','2–8 Wochen'],
+        ['Integrationskurs + Sprachkurs B1 absolvieren','BAMF-gefördert, oft kostenfrei','6–12 Monate'],
+        ['Nach 21 Monaten (oder 33 ohne B1): Niederlassungserlaubnis beantragen','§18c Abs. 2 AufenthG','sofort beantragen'],
+      ],
+      uk:[
+        ['Отримати визнаний диплом (Anerkennung)','Перевірте на anabin.kmk.org, подайте через IQ Netzwerk або Kammer','3–6 міс.'],
+        ['Знайти роботодавця із зарплатою €45.300+/рік','(або €35.300 для Mangelberufe: IT, медицина, інженерія)','змінно'],
+        ['Подати заяву на EU Blue Card (§18c)','через Ausländerbehörde або посольство Німеччини','2–8 тиж.'],
+        ['Пройти Integrationskurs + іспит мова B1','BAMF субсидує, часто безкоштовно','6–12 міс.'],
+        ['Після 21 міс. (або 33 без B1): подати на Niederlassungserlaubnis','§18c Abs. 2 AufenthG','одразу після строку'],
+      ],
+      en:[
+        ['Obtain recognised degree (Anerkennung)','Check anabin.kmk.org, apply via IQ Netzwerk or relevant Kammer','3–6 months'],
+        ['Find employer with salary €45,300+/year','(or €35,300 for shortage occupations: IT, medicine, engineering)','variable'],
+        ['Apply for EU Blue Card (§18c)','at Ausländerbehörde or German embassy','2–8 weeks'],
+        ['Complete Integrationskurs + B1 language exam','BAMF-subsidised, often free','6–12 months'],
+        ['After 21 months (or 33 without B1): apply for Niederlassungserlaubnis','§18c Abs. 2 AufenthG','immediately after deadline'],
+      ],
+    },
+    para24: {
+      uk:[
+        ['Зареєструватись (Anmeldung) та отримати §24 дозвіл','через Ausländerbehörde вашого міста','негайно'],
+        ['Записатись на Integrationskurs','Безкоштовно або пільгово через BAMF. Реєстрація: bamf.de','якнайшвидше'],
+        ['Знайти офіційну роботу або Ausbildung','Підтвердить фінансову незалежність — ключовий фактор переходу','в процесі'],
+        ['Після 18–24 міс.: подати на §18 AufenthG або §25','Потрібно: B1, страховка, Anmeldung, трудовий контракт','18–24 міс.'],
+        ['Через 5 років: Niederlassungserlaubnis §9','60 міс. пенсійних внесків, B1, без соцдопомоги','5 років'],
+      ],
+      de:[
+        ['Anmeldung durchführen und §24-Erlaubnis erhalten','bei der Ausländerbehörde Ihrer Stadt','sofort'],
+        ['Integrationskurs anmelden','Kostenlos oder vergünstigt über BAMF. Anmeldung: bamf.de','baldmöglichst'],
+        ['Offizielle Anstellung oder Ausbildung finden','Belegt finanzielle Unabhängigkeit — Schlüsselfaktor für Übergang','laufend'],
+        ['Nach 18–24 Monaten: §18 AufenthG oder §25 beantragen','Benötigt: B1, Versicherung, Anmeldung, Arbeitsvertrag','18–24 Monate'],
+        ['Nach 5 Jahren: Niederlassungserlaubnis §9','60 Monate Rentenbeiträge, B1, keine Sozialleistungen','5 Jahre'],
+      ],
+      en:[
+        ['Register (Anmeldung) and get §24 permit','at your local Ausländerbehörde','immediately'],
+        ['Enrol in Integrationskurs','Free or subsidised through BAMF. Register at bamf.de','as soon as possible'],
+        ['Find official employment or Ausbildung','Proves financial independence — key for transitioning','ongoing'],
+        ['After 18–24 months: apply for §18 AufenthG or §25','Needed: B1, insurance, Anmeldung, work contract','18–24 months'],
+        ['After 5 years: Niederlassungserlaubnis §9','60 months pension contributions, B1, no social assistance','5 years'],
+      ],
+    },
+    duldung: {
+      uk:[
+        ['Перевірити відповідність умовам §25b','8+ років (або 6 із дітьми), стабільний дохід, B1, без вироків','зараз'],
+        ['Зупинити отримання Bürgergeld','Забезпечте самостійний дохід до подачі заяви','3–6 міс. до подачі'],
+        ['Зібрати підтверджуючі документи','Трудовий договір, довідку з рентгену мови, Mietvertrag','1–2 міс.'],
+        ['Подати заяву на §25b через адвоката','Fachanwalt für Migrationsrecht допоможе підготувати пакет','з документами'],
+        ['Отримати Aufenthaltserlaubnis §25b','Далі — перехід на §9 через 5 років з B1 + 60 міс. пенсії','5 років'],
+      ],
+      de:[
+        ['Voraussetzungen §25b prüfen','8+ Jahre (oder 6 mit Kindern), stabiles Einkommen, B1, keine Verurteilungen','jetzt'],
+        ['Bürgergeld-Bezug einstellen','Eigenständiges Einkommen vor Antragstellung sicherstellen','3–6 Monate vor Antrag'],
+        ['Belege zusammenstellen','Arbeitsvertrag, Sprachzertifikat, Mietvertrag, Rentennachweis','1–2 Monate'],
+        ['§25b-Antrag über Anwalt stellen','Fachanwalt für Migrationsrecht hilft bei der Vorbereitung','mit Unterlagen'],
+        ['Aufenthaltserlaubnis §25b erhalten','Dann: §9 nach 5 Jahren mit B1 + 60 Monate Rente','5 Jahre'],
+      ],
+      en:[
+        ['Check §25b eligibility','8+ years (or 6 with children), stable income, B1, no convictions','now'],
+        ['Stop receiving Bürgergeld','Secure independent income before applying','3–6 months before applying'],
+        ['Collect supporting documents','Employment contract, language certificate, rental contract','1–2 months'],
+        ['Apply for §25b through a lawyer','Fachanwalt für Migrationsrecht will help prepare the package','with documents'],
+        ['Receive Aufenthaltserlaubnis §25b','Then: §9 after 5 years with B1 + 60 months pension','5 years'],
+      ],
+    },
   };
 
-  const done = [];
-  if (docs.includes('anmeldung'))   done.push({t:'✅ Anmeldung (§17 BMG)', d:'Реєстрація за місцем проживання виконана'});
-  if (docs.includes('health'))      done.push({t:'✅ Krankenversicherung (§193 VVG)', d:'Медична страховка є'});
-  if (docs.includes('pension'))     done.push({t:'✅ Rentenversicherungsbeiträge', d:'Внески до пенсійного фонду нараховуються'});
-  if (docs.includes('pension60'))   done.push({t:'✅ 60 Monate Rente (§9 Abs.2 Nr.3)', d:'Ключова умова для Niederlassungserlaubnis виконана'});
-  if (docs.includes('integration')) done.push({t:'✅ Integrationskurs (§43 AufenthG)', d:'Враховується як сильний інтеграційний фактор'});
-  if (docs.includes('no_social'))   done.push({t:'✅ Kein Bürgergeld (§2 Abs.3)', d:'Фінансова самодостатність підтверджена'});
-  if (docs.includes('housing'))     done.push({t:'✅ Feste Unterkunft', d:'Наявність житла підтверджена'});
-  if (docs.includes('tax'))         done.push({t:'✅ Steuererklärung', d:'Регулярна подача податкової декларації'});
-  if (docs.includes('civic'))       done.push({t:'✅ Leben-in-Deutschland-Test', d:'Громадянознавчий тест складено'});
-  if (ls>=10) done.push({t:'✅ Deutschkenntnisse '+(D.language||'').toUpperCase()+' (§9 Abs.2 Nr.7)', d:'Мовна умова для Niederlassungserlaubnis виконана'});
-  if (legS>=9) done.push({t:'✅ Unbescholtenheit (§5 Abs.1 Nr.2)', d:'Правова чистота — жодних перешкод'});
-  if (sal>=2200&&emp!=='jobcenter'&&emp!=='unemployed') done.push({t:'✅ Einkommen €'+sal+'/Mo. (§2 Abs.3)', d:'Рівень доходу відповідає вимогам самозабезпечення'});
-  if (['bluecardeu','work','fachkraft','asylum_ok','para24','student','freelance','family'].includes(D.status))
-    done.push({t:'✅ Legaler Aufenthaltstitel (§'+
-      (D.status==='bluecardeu'?'18c':D.status==='asylum_ok'?'25 Abs.1/2':D.status==='para24'?'24':D.status==='student'?'16b':D.status==='freelance'?'21':D.status==='family'?'27/29':'18')+')',
-      d:'Дійсний Aufenthaltserlaubnis є'});
-  if (months>=60) done.push({t:'✅ 5 Jahre Aufenthalt (§9 Abs.1)', d:months+' місяців — часова умова §9 NE виконана'});
+  let stepKey = 'bluecardeu';
+  if (D.status==='para24') stepKey='para24';
+  if (D.status==='duldung'||D.status==='para25b') stepKey='duldung';
 
-  const block = [], todo = [];
+  const langKey = lang==='de'?'de':lang==='en'||lang==='tr'||lang==='ar'||lang==='pl'||lang==='ru'||lang==='ro'?'en':'uk';
+  const chosen = (steps[stepKey]||steps.bluecardeu)[langKey]||steps.bluecardeu.en;
 
-  if (D.status==='none')
-    block.push({t:'🚫 Немає легального статусу (§4 AufenthG)',
-      d:'Без Aufenthaltserlaubnis перебування є незаконним. Найсерйозніший блокер.',
-      action:'1. Негайно зверніться до Ausländerbehörde — самоявка оцінюється краще, ніж виявлення. 2. Одночасно зверніться до Fachanwalt für Migrationsrecht. 3. Можливі шляхи: §25b (якщо 8+ р. в DE), §18 (є пропозиція роботи), §16b (вступ у навч. заклад).',
-      where:'📍 Ausländerbehörde (negайно) + Fachanwalt', urg:lbl.immed});
-
-  if (!docs.includes('anmeldung'))
-    block.push({t:'🚫 Відсутня реєстрація — Anmeldung (§17 BMG)',
-      d:'Обов\'язкова протягом 14 днів після переїзду. Без неї жодна заява не приймається — це перший абсолютний крок.',
-      action:'1. Знайдіть Bürgeramt (Rathaus) вашого міста. 2. Потрібно: дійсний Reisepass/Personalausweis + Wohnungsgeberbestätigung (підписана орендодавцем). 3. Запишіться онлайн або прийдіть особисто. Безкоштовно.',
-      where:'📍 Bürgeramt / Einwohnermeldeamt вашого міста', urg:lbl.immed});
-
-  if (!docs.includes('health'))
-    block.push({t:'🚫 Відсутня медична страховка (§193 VVG)',
-      d:'Krankenversicherung обов\'язкова для всіх резидентів Німеччини. Без неї жодна заява на Aufenthaltstitel не розглядається.',
-      action:'Якщо офіційно працевлаштовані: страховка є автоматично — перевірте у роботодавця. Якщо ні: зверніться до TK (tk.de), DAK (dak.de) або AOK (aok.de). Вартість: від €220/міс. (2024). Для безробітних з Bürgergeld — покривається Jobcenter.',
-      where:'📍 TK: tk.de | DAK: dak.de | AOK: aok.de', urg:lbl.immed});
-
-  if (D.legal==='overstay')
-    block.push({t:'🚫 Перевищення строку дозволу — Overstay (§4 AufenthG)',
-      d:'Перебування без дійсного Aufenthaltstitel є адміністративним правопорушенням (§95 AufenthG). Але добровільна явка суттєво пом\'якшує наслідки.',
-      action:'1. Зверніться самостійно до Ausländerbehörde — добровільна явка зараховується як позитивний фактор. 2. Підготуйте письмове пояснення причин (хвороба, форс-мажор тощо). 3. Одночасно залучіть Fachanwalt für Ausländerrecht. 4. Якщо є пропозиція роботи — це суттєво підвищує шанси на легалізацію.',
-      where:'📍 Ausländerbehörde (особиста явка) + Fachanwalt', urg:lbl.immed});
-
-  if (D.legal==='deportation')
-    block.push({t:'🚫 Попередня депортація / Einreisesperre (§11 AufenthG)',
-      d:'Депортація автоматично тягне Einreise- und Aufenthaltsverbot (§11 Abs.1). Перебування в DE без вирішення цього питання — кримінальний злочин (§95 Abs.1 Nr.2).',
-      action:'1. НЕ залишайтесь в DE без вирішення — ризик кримінального переслідування. 2. Через Fachanwalt подайте Antrag auf Befristung oder Aufhebung des Einreiseverbots (§11 Abs.4 AufenthG). 3. Підстави для скасування: зміна обставин, виняткові особисті зв\'язки з DE (діти-громадяни тощо).',
-      where:'📍 Fachanwalt für Migrationsrecht — обов\'язково', urg:lbl.immed});
-
-  if (D.legal==='criminal_conviction')
-    block.push({t:'🚫 Наявність вироку суду (§5 Abs.1 Nr.2, §54 AufenthG)',
-      d:'Вирок суду є перешкодою для більшості ВНЖ. ПРОТЕ: §9 Abs.2 Nr.4 прямо допускає NE при вирокові ≤90 Tagessätze або ≤3 місяці умовно. Абсолютна заборона — лише при тяжких злочинах.',
-      action:'1. Зверніться до Fachanwalt für Ausländer- und Strafrecht. 2. Надайте: копію вироку, дані про Wohlverhalten (поведінка після вироку), посилання на давність. 3. При вирокові ≤90 ТС: запитайте про §9 Abs.2 Nr.4 — він може прямо застосовуватись. 4. Якщо >90 ТС: Ermessen Ausländerbehörde, не автоматична відмова.',
-      where:'📍 Fachanwalt für Ausländerrecht + Strafverteidiger', urg:lbl.immed});
-
-  if (emp==='jobcenter')
-    block.push({t:'🚫 Отримання Bürgergeld (§2 Abs.3 AufenthG)',
-      d:'Bürgergeld/Sozialhilfe блокує більшість заяв на Aufenthaltstitel. Ausländerbehörde автоматично отримує дані від Jobcenter через SGB II.',
-      action:'1. Знайдіть роботу або зареєструйтесь як Freiberufler (Gewerbeanmeldung — €20–30). 2. Офіційно відмовтесь від Bürgergeld у Jobcenter (Abmeldung). 3. Накопичіть мінімум 3 місяці незалежного доходу (Lohnabrechnungen як доказ). 4. Тільки після цього подавайте на ВНЖ.',
-      where:'📍 Jobcenter (відмова) → Arbeitsagentur / StepStone / LinkedIn', urg:lbl.short});
-
-  // TODO items
-  if (ls<6)
-    todo.push({t:'📋 Вивчити мову мінімум до B1 (§9 Abs.2 Nr.7 / §25b Abs.1 Nr.4)',
-      d:'B1 — обов\'язковий мінімум для §9 Niederlassungserlaubnis. §25b вимагає A2 усно. Blue Card: B1 дає NE через 21 міс. замість 33.',
-      action:'1. Зареєструйтесь на BAMF Integrationskurs (bamf.de) — 700+100 год., часто безкоштовно для §24 та інших. 2. Альтернативно: VHS від €150, Goethe online від €200. 3. Складіть іспит: Goethe-Zertifikat B1, telc Deutsch B1 або ÖSD B1 — всі рівнозначні. 4. Apps для практики: Babbel, Nicos Weg (безкоштовно, DW).',
-      where:'📍 bamf.de → Integrationskurse / goethe.de / telc.net', urg:lbl.mid});
-  else if (ls<10)
-    todo.push({t:'📋 Підвищити рівень мови до B1 (§9 Abs.2 Nr.7)',
-      d:'Маєте '+D.language+', потрібно B1. Blue Card: B1 скорочує очікування NE з 33 до 21 місяця — економія 1 рік!',
-      action:'Продовжуйте курс. Складіть Goethe B1 або telc B1. Практика щодня: Tandem з носіями (tandem.net), Nicos Weg (dw.com, безкоштовно), Babbel.',
-      where:'📍 goethe.de / telc.net / tandem.net', urg:lbl.short});
-
-  if (!docs.includes('integration'))
-    todo.push({t:'📋 Пройти Integrationskurs (§43–44a AufenthG)',
-      d:'700 год. мови + 100 год. орієнтації (Deutsch-Test für Zuwanderer + Leben-in-Deutschland-Test). Зараховується як позитивний фактор для §25b та §9.',
-      action:'1. Зареєструйтесь: bamf.de → "Kursort finden". 2. Або в Ausländerbehörde — вони направлять. 3. Для §24 (Ukrainer): часто безкоштовно. Для інших: ~€1/год (субсидовано), або подайте на Erlass (звільнення від оплати).',
-      where:'📍 bamf.de → Integrationskurse', urg:lbl.short});
-
-  if (!docs.includes('pension60')&&['work','fachkraft','bluecardeu','freelance'].includes(D.status))
-    todo.push({t:'📋 Накопити 60 місяців Rentenversicherung (§9 Abs.2 Nr.3)',
-      d:'Абсолютна обов\'язкова умова для §9 NE. Рахуються місяці офіційної роботи в DE або добровільних внесків. Роки роботи в ЄС можуть зараховуватись (Sozialversicherungsabkommen).',
-      action:'1. Замовте безкоштовно Rentenversicherungsverlauf: deutsche-rentenversicherung.de або тел. 0800 1000 4800. 2. Перевірте зарахування років з ЄС-країн. 3. Дефіцит покривається добровільними внесками (§7 SGB VI) — для Freiberufler особливо важливо. 4. Kreativberufe: Künstlersozialkasse (KSK) — субсидовані внески.',
-      where:'📍 deutsche-rentenversicherung.de / KSK (kuenstlersozialkasse.de)', urg:lbl.mid});
-
-  if (D.edu==='degree_foreign')
-    todo.push({t:'📋 Подати на Anerkennung диплому (BQFG 2012, §18c Abs.1 Nr.2)',
-      d:'Без Anerkennung: EU Blue Card неможлива, Fachkräfteeinwanderung ускладнена. З Anerkennung: вища зарплата (пряма вимога §18c), кращі умови.',
-      action:'1. Перевірте диплом на anabin.kmk.org (H+/H= = повне визнання). 2. IQ Netzwerk — безкоштовна консультація: migrationsberatung-iQ.de. 3. Подайте через відповідну Kammer (IHK, Ärztekammer, Ingenieurkammer тощо) або Behörde. 4. Часткова відмова: Qualifikationsanalyse або Anpassungsqualifizierung. Термін розгляду: 3–6 міс.',
-      where:'📍 anabin.kmk.org → IQ Netzwerk: migrationsberatung-iQ.de', urg:lbl.mid});
-
-  if (sal<2200&&emp!=='jobcenter'&&emp!=='unemployed'&&sal>0)
-    todo.push({t:'📋 Підвищити дохід до мінімуму €2.200+ брутто (§2 Abs.3)',
-      d:'Самозабезпечення 2024: ~€563/міс. Regelbedarf + витрати на житло. Практично: ~€1.600 нетто для одинака. Blue Card: €45.300/рік gross = ~€3.775/міс. Зараз у вас €'+sal+'.',
-      action:'1. Переговори з роботодавцем (Gehaltsverhandlung) — підготуйте ринкові дані з gehalt.de або stepstone.de. 2. Перевірте Mangelberufe (ba.de/Mangelberufe) — нижчий поріг для Blue Card (€41.041/р.). 3. Розгляньте зміну роботодавця або позиції. 4. Додатковий дохід як Freiberufler поруч із основною роботою (до €10.347/р. — без обов\'язкової KST).',
-      where:'📍 gehalt.de / stepstone.de / ba.de/Mangelberufe', urg:lbl.mid});
-
-  if (months<neededMonths&&D.status!=='none') {
-    const left = neededMonths - months;
-    todo.push({t:'📋 Накопити ще '+left+' міс. легального перебування (§9 Abs.1 / §'+
-        (D.status==='bluecardeu'?'18c':D.status==='asylum_ok'?'26 Abs.3':D.status==='duldung'||D.status==='para25b'?'25b':'9')+')',
-      d:'Необхідно '+neededMonths+' місяців, у вас '+months+'. Кожен прострочений дозвіл перериває відлік!',
-      action:'1. Продовжуйте Aufenthaltstitel вчасно — за 3–6 місяців до закінчення. 2. Якщо закінчується під час розгляду — запросіть Fiktionsbescheinigung (§81 Abs.4 AufenthG) — вона підтверджує законність перебування. 3. Не виїжджайте за межі Шенгену >6 місяців підряд (§51 Abs.1 Nr.7 — переривання відліку). 4. Виїзди в межах ЄС коротші 6 міс. — не проблема.',
-      where:'📍 Ausländerbehörde (verlängerung) — не пізніше ніж за 3 міс.', urg:lbl.long});
-  }
-
-  if (months>=48&&!docs.includes('civic'))
-    todo.push({t:'📋 Скласти тест "Leben in Deutschland" (§43 AufenthG)',
-      d:'Необхідний для Einbürgerung (натуралізація). Для §9 NE офіційно не обов\'язковий, але демонструє інтеграцію. 33 питання з банку 310.',
-      action:'Готуйтесь на oeta.de або app "Einbürgerungstest". Складайте у BAMF-сертифікованому закладі. Безкоштовна практика: bamf.de → "Einbürgerungstest".',
-      where:'📍 bamf.de → Einbürgerungstest', urg:lbl.mid});
-
-  const doneHtml = done.length===0
-    ? '<p style="font-size:12px;color:var(--tx3)">—</p>'
-    : done.map(d=>'<div style="display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--brd)"><div><div style="font-size:12px;font-weight:600;color:var(--green)">'+d.t+'</div><div style="font-size:11px;color:var(--tx2);margin-top:1px">'+d.d+'</div></div></div>').join('');
-
-  const blockHtml = block.map((b,i)=>'<div style="background:var(--redL);border:1.5px solid rgba(204,0,0,0.2);border-radius:var(--r2);padding:12px 14px;margin-bottom:8px">'+
-    '<div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:6px;flex-wrap:wrap">'+
-    '<span style="background:var(--redD);color:#fff;min-width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px">'+(i+1)+'</span>'+
-    '<div style="font-size:12px;font-weight:700;color:var(--redD);flex:1">'+b.t+'</div>'+
-    '<span style="font-size:10px;font-family:JetBrains Mono,monospace;background:var(--redD);color:#fff;padding:2px 7px;border-radius:10px;white-space:nowrap">'+b.urg+'</span></div>'+
-    '<div style="font-size:11px;color:#4a0000;margin-bottom:6px;line-height:1.55">'+b.d+'</div>'+
-    '<div style="font-size:11px;color:var(--redD);line-height:1.6;background:rgba(204,0,0,0.06);padding:7px 9px;border-radius:6px"><strong>Дії:</strong> '+b.action+'</div>'+
-    '<div style="font-size:10px;color:var(--tx3);margin-top:5px;font-family:JetBrains Mono,monospace">'+b.where+'</div></div>').join('');
-
-  const todoHtml = todo.map((td,i)=>'<div style="background:var(--amberL);border:1.5px solid rgba(138,80,0,0.18);border-radius:var(--r2);padding:12px 14px;margin-bottom:8px">'+
-    '<div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:6px;flex-wrap:wrap">'+
-    '<span style="background:var(--amber);color:#fff;min-width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px">'+(block.length+i+1)+'</span>'+
-    '<div style="font-size:12px;font-weight:700;color:var(--amber);flex:1">'+td.t+'</div>'+
-    '<span style="font-size:10px;font-family:JetBrains Mono,monospace;background:var(--amber);color:#fff;padding:2px 7px;border-radius:10px;white-space:nowrap">'+td.urg+'</span></div>'+
-    '<div style="font-size:11px;color:#3d2000;margin-bottom:6px;line-height:1.55">'+td.d+'</div>'+
-    '<div style="font-size:11px;color:var(--amber);line-height:1.6;background:rgba(138,80,0,0.07);padding:7px 9px;border-radius:6px"><strong>Дії:</strong> '+td.action+'</div>'+
-    '<div style="font-size:10px;color:var(--tx3);margin-top:5px;font-family:JetBrains Mono,monospace">'+td.where+'</div></div>').join('');
-
-  return '<div style="background:var(--card);border-radius:var(--r);box-shadow:var(--shL);padding:1.5rem;margin-bottom:.8rem;border:2px solid var(--brd)">'+
-    '<div style="display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:1px solid var(--brd)">'+
-    '<div style="width:36px;height:36px;background:var(--black);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📊</div>'+
-    '<div><div style="font-size:15px;font-weight:700;letter-spacing:-.01em">'+lbl.title+'</div>'+
-    '<div style="font-size:10px;color:var(--tx3);font-family:JetBrains Mono,monospace">'+pct+'% · '+today+'</div></div></div>'+
-
-    '<div style="margin-bottom:1.1rem">'+
-    '<div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:.5rem;font-family:JetBrains Mono,monospace">'+lbl.done+' ('+done.length+')</div>'+
-    doneHtml+'</div>'+
-
-    (block.length>0?'<div style="margin-bottom:1.1rem"><div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--redD);margin-bottom:.5rem;font-family:JetBrains Mono,monospace">'+lbl.block+' ('+block.length+')</div>'+blockHtml+'</div>':'')+
-
-    (todo.length>0?'<div style="margin-bottom:1.1rem"><div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);margin-bottom:.5rem;font-family:JetBrains Mono,monospace">'+lbl.todo+' ('+todo.length+')</div>'+todoHtml+'</div>':'')+
-
-    '<div style="background:var(--surf2);border-radius:var(--r2);padding:10px 13px;border:1.5px solid var(--brd2)">'+
-    '<p style="font-size:11px;color:var(--tx2);line-height:1.65;font-weight:500">'+lbl.disc+'</p></div></div>';
-}
-
-function buildPathSteps(pathKey) {
-  const paths = {
-    bc:[
-      {t:'Перевірити Anerkennung диплому', d:'§18c Abs.1 Nr.2 — anerkannter Hochschulabschluss обов\'язковий. Перевірте: anabin.kmk.org. H+/H= = прийнятний. IQ Netzwerk — безкоштовна консультація.', dur:'1–4 тиж.'},
-      {t:'Знайти роботодавця — зарплата ≥ €45.300/рік gross', d:'або €41.041,80 для Mangelberufe (IT, Medizin, Ingenieurwesen, Pflege, Erzieher). Перевірте: ba.de/Mangelberufe. Пошук: StepStone, LinkedIn, Make it in Germany.', dur:'1–6 міс.'},
-      {t:'Отримати EU Blue Card §18c AufenthG', d:'Заява до Ausländerbehörde. Документи: Arbeitsvertrag, Hochschulabschluss + Anerkennung, Anmeldung, KV-Nachweis, Lichtbild, Reisepass. Термін: 2–8 тиж.', dur:'2–8 тиж.'},
-      {t:'Пройти Integrationskurs + досягти B1', d:'B1 скорочує шлях до NE з 33 до 21 місяця (§18c Abs.2). BAMF Integrationskurs: 700 год. мови + 100 год. орієнтації. bamf.de.', dur:'6–12 міс.'},
-      {t:'Подати на Niederlassungserlaubnis §18c Abs.2', d:'Умови: 21 міс. + B1 (або 33 міс. без B1), безперервна Blue Card, без Bürgergeld, без вироків (§9 Abs.2 Nr.4 — допускає ≤90 ТС), Rentenversicherungsnachweis.', dur:'після 21/33 міс.'},
-    ],
-    bc_ne:[
-      {t:'Замовити Führungszeugnis (довідка про несудимість)', d:'Онлайн: bundesjustizamt.de → Führungszeugnis Belegart О. Або в Bürgeramt. Вартість: €13. Термін: 2–4 тиж.', dur:'2–4 тиж.'},
-      {t:'Отримати Rentenversicherungsverlauf', d:'deutsche-rentenversicherung.de або тел. 0800 1000 4800 (безкоштовно). Переконайтесь в наявності достатньої кількості місяців (для §18c NE — окремих вимог немає, але потрібен наявний Nachweis).', dur:'1 тиж.'},
-      {t:'Зібрати повний пакет і подати заявку на §18c Abs.2 NE', d:'Reisepass + Blue Card + Anmeldung + Arbeitsvertrag + Gehaltsnachweis (3 міс.) + Sprachzertifikat B1 + KV-Nachweis + Führungszeugnis + Lichtbild. Запишіться онлайн до Ausländerbehörde!', dur:'зараз'},
-    ],
-    work:[
-      {t:'Продовжити Aufenthaltserlaubnis §18 вчасно', d:'Подавайте за 3–6 місяців до закінчення. Не чекайте — прострочення є порушенням §4 AufenthG. Запитайте Fiktionsbescheinigung §81 Abs.4 якщо затримується розгляд.', dur:'за 3–6 міс.'},
-      {t:'Накопити 60 місяців Rentenversicherung §9 Abs.2 Nr.3', d:'Замовте Rentenversicherungsverlauf (DRV): deutsche-rentenversicherung.de або 0800 1000 4800. Роки в ЄС-країнах можуть зараховуватись за Sozialversicherungsabkommen.', dur:'до 60 міс.'},
-      {t:'Досягти B1 за §9 Abs.2 Nr.7', d:'Обов\'язкова умова для §9 NE. Гoethe B1, telc Deutsch B1 або ÖSD B1 — рівнозначні. VHS від €150, Goethe від €200.', dur:'6–18 міс.'},
-      {t:'Самозабезпечення без Bürgergeld (§2 Abs.3)', d:'Мінімум ~€1.600 нетто/міс. для одинака (2024 Regelbedarf). Зберігайте Lohnabrechnungen як доказ.', dur:'постійно'},
-      {t:'Подати заявку на §9 Niederlassungserlaubnis', d:'Документи: Reisepass + Mietvertrag + Rentenversicherungsverlauf (60 Monate) + B1-Zertifikat + Gehaltsnachweis (3 Monate) + Führungszeugnis + Anmeldung + KV-Nachweis + Lichtbild.', dur:'після 60 міс.'},
-    ],
-    ne9:[
-      {t:'Ви вже маєте право на §9 NE — дійте зараз!', d:'60 місяців пройшло, 60 місяців Rente є, B1 є — всі основні умови §9 Abs.2 виконані. Час збирати документи.', dur:'зараз'},
-      {t:'Замовити Führungszeugnis (бундесцентральний)', d:'bundesjustizamt.de → Führungszeugnis Belegart О (онлайн €13 або Bürgeramt). Термін виготовлення: 2–4 тиж.', dur:'2–4 тиж.'},
-      {t:'Зібрати повний пакет та подати', d:'Reisepass + Anmeldung + Rentenversicherungsverlauf (60+ Monate) + B1-Zertifikat + Gehaltsnachweis (3 Monate Lohnabrechnung) + Führungszeugnis + Mietvertrag + KV-Nachweis + Lichtbild. Запишіться онлайн до Ausländerbehörde.', dur:'4–12 тиж. розгляд'},
-    ],
-    para24:[
-      {t:'Anmeldung + §24 Aufenthaltserlaubnis', d:'§24 AufenthG: Bürgeramt → Anmeldung (Reisepass + Wohnungsgeberbestätigung). Ausländerbehörde → §24 (для українців — пред\'явіть закордонний паспорт і підтвердіть громадянство UA або статус). §24 дозволяє повну зайнятість.', dur:'негайно'},
-      {t:'BAMF Integrationskurs (§44 AufenthG)', d:'Для власників §24: субсидується або безкоштовний. Реєстрація: bamf.de → "Kursort finden". 700 год. + 100 год. орієнтації. Дає B1 + Leben-in-Deutschland. Термін: 6–12 міс.', dur:'6–12 міс.'},
-      {t:'Знайти офіційну роботу або Ausbildung', d:'§24 дозволяє роботу без додаткового дозволу. Ausbildung: 3 р. навчання → §18a після закінчення → §9. Ресурси: arbeitsagentur.de, ausbildung.de, make-it-in-germany.com.', dur:'1–12 міс.'},
-      {t:'Перехід на §18 AufenthG', d:'Умови: Arbeitsvertrag (що відповідає кваліфікації) + Anmeldung + KV + достатній дохід. §24 анулюється, §18 — більш стабільний статус. Якщо зарплата ≥ €41.041: розгляньте Blue Card §18c!', dur:'18–24 міс.'},
-      {t:'§9 Niederlassungserlaubnis через 5 р. від §18', d:'60 міс. §18 + 60 міс. Rentenversicherung + B1 + без Bürgergeld + Führungszeugnis + Anmeldung + KV. Термін 5 р. рахується від §18, не від §24.', dur:'5 р. від §18'},
-    ],
-    asylum:[
-      {t:'Зберегти §25 Abs.1/2 — не виїжджати до країни походження', d:'§73 AsylG: поїздка до країни походження = підстава для відкликання статусу! §51 AufenthG: виїзд >6 міс. = втрата Aufenthaltstitel. Про будь-який виїзд проконсультуйтесь з адвокатом.', dur:'постійно'},
-      {t:'Виконувати умови §5 AufenthG при кожному продовженні', d:'(1) Anmeldung актуальна, (2) KV діє, (3) дохід без Bürgergeld (бажано), (4) відсутність нових злочинів, (5) паспорт або Reiseausweis für Ausländer дійсний.', dur:'постійно'},
-      {t:'КЛЮЧОВО: §26 Abs.3 — NE вже через 3 роки (не 5!)', d:'§26 Abs.3 AufenthG (ВАЖЛИВА ПІЛЬГА): визнані GFK-біженці (§25 Abs.1) отримують Niederlassungserlaubnis вже після 3 років! Для §25 Abs.2 (субсидіарний захист): 5 р. + спец. умови.', dur:'через 36 міс. від рішення BAMF'},
-      {t:'Підготувати заявку на §26 Abs.3 NE', d:'Reiseausweis für Ausländer (або паспорт) + BAMF-Bescheid §25 Abs.1 + Anmeldung + KV-Nachweis + Gehaltsnachweis + Führungszeugnis + Lichtbild. Звертайтесь до Ausländerbehörde через 36 місяців від дати рішення BAMF.', dur:'після 36 міс.'},
-    ],
-    asylum_ne:[
-      {t:'Підтвердіть право та дату рішення BAMF', d:'Перевірте дату позитивного рішення BAMF по §25 Abs.1. Від неї рахується 36 місяців (§26 Abs.3). Якщо пройшло — ви ВЖЕ маєте право на NE. Зверніться зараз!', dur:'зараз'},
-      {t:'Зберіть документи для NE §26 Abs.3', d:'Reiseausweis für Ausländer (або паспорт) + BAMF-Bescheid (§25 Abs.1) + Anmeldung + KV + Gehaltsnachweis або Bürgergeld-Bescheid (Rente bei GFK не завжди потрібна — уточніть в AB!) + Führungszeugnis + Lichtbild.', dur:'1–2 тиж.'},
-      {t:'Подати заявку до Ausländerbehörde', d:'Запишіться онлайн (зазвичай за 2–6 тиж.) або зверніться особисто. При закінченні §25 під час розгляду: запросіть Fiktionsbescheinigung §81 Abs.4 AufenthG — підтверджує законність перебування.', dur:'4–12 тиж. розгляд'},
-    ],
-    duldung:[
-      {t:'Перевірити умови §25b Abs.1 AufenthG', d:'8 р. Aufenthalt (або 6 р. з дітьми до 18). Час: рахується Duldung + Aufenthaltsgestattung + tolerated stay. Перевірте старі Duldung-довідки, Meldebescheinigungen, рішення суду, листи від BAMF.', dur:'зараз'},
-      {t:'Вийти з Bürgergeld — §25b Abs.1 Nr.3', d:'Самозабезпечення — ОБОВ\'ЯЗКОВА умова §25b. Знайдіть роботу або зареєструйтесь як Freiberufler (Gewerbeanmeldung ~€20). Накопичіть 3+ місяці незалежного доходу (Lohnabrechnungen).', dur:'3–6 міс.'},
-      {t:'Підтвердити мову — мінімум A2 усно (бажано B1)', d:'§25b Abs.1 Nr.4 вимагає "ausreichende mündliche Deutschkenntnisse" = практично A2 рівень. Але B1 суттєво підвищує шанси на успіх при дискреційному рішенні AB.', dur:'2–6 міс.'},
-      {t:'Зібрати докази 8-річного перебування', d:'Meldebescheinigungen (усі попередні адреси) + старі Duldung-довідки + Aufenthaltsgestattung + листи від BAMF + шкільні довідки дітей (якщо є). Прогалини в документах — завдання адвоката.', dur:'2–4 тиж.'},
-      {t:'Подати заяву на §25b через Fachanwalt', d:'Fachanwalt für Migrationsrecht суттєво підвищує шанси — він знає практику конкретної Ausländerbehörde. Після §25b: 5 р. + 60 міс. RV + B1 + без Bürgergeld → §9 NE.', dur:'з документами'},
-    ],
-    para25b_path:[
-      {t:'Уточніть ваш час перебування по документах', d:'§25b Abs.1 Nr.1: 8 р. безперервного перебування (6 р. для сімей). Рахується: Duldung + Aufenthaltsgestattung + Overstay (обережно) + легальний статус. Перевірте кожен рік.', dur:'зараз'},
-      {t:'Забезпечити дохід без Bürgergeld', d:'Знайдіть роботу або відкрийте Gewerbe як Freiberufler. Накопичіть 3+ місяці незалежного доходу. Відмовтесь від Bürgergeld офіційно в Jobcenter.', dur:'3+ міс.'},
-      {t:'Підготувати доказову базу', d:'Мeldebescheinigungen за всі роки + Duldung-довідки + KV + Arbeitsvertrag/Gewerbeanmeldung + Sprachzertifikat + Führungszeugnis + якщо є діти: Schulbescheinigungen.', dur:'2–4 тиж.'},
-      {t:'Подати на §25b AufenthG через Fachanwalt', d:'Fachanwalt оцінить шанси, підготує заяву та представлятиме вас перед Ausländerbehörde.', dur:'з документами'},
-      {t:'Після §25b → §9 NE через 5 років', d:'60 міс. Rentenversicherung + B1 + без Bürgergeld + Führungszeugnis + Anmeldung → §9 Niederlassungserlaubnis.', dur:'5 р.'},
-    ],
-    para31:[
-      {t:'Ви маєте право на §31 AufenthG — перевірте умови', d:'§31 Abs.1 Nr.1: 3 роки шлюбу + 3 роки легального перебування в DE. Або §31 Abs.1 Nr.2: шлюб припинився внаслідок смерті або особливих обставин (домашнє насильство — §31 Abs.2).', dur:'зараз'},
-      {t:'Зібрати документи для §31', d:'Reisepass + Heiratsurkunde (з апостилем та перекладом) + Anmeldung + Nachweis статусу подружжя (громадянство DE або EU Aufenthaltstitel) + Gehaltsnachweis + KV + Lichtbild + Führungszeugnis.', dur:'1–2 тиж.'},
-      {t:'Подати заяву на §31 AufenthG до Ausländerbehörde', d:'§31 дає незалежний Aufenthaltserlaubnis на 1 рік з правом на продовження. Після 5 р. загального легального перебування → право на §9 NE.', dur:'2–8 тиж. розгляд'},
-    ],
-    para28:[
-      {t:'Оформити §28 Abs.1 Nr.1 AufenthG', d:'Подружжя громадянина Німеччини має право на Aufenthaltserlaubnis §28 без особливих фінансових умов (достатній дохід подружжя-громадянина враховується). Потрібно: шлюбне свідоцтво, Anmeldung, KV.', dur:'2–8 тиж.'},
-      {t:'Пройти Integrationskurs та досягти B1', d:'B1 прискорює §31 та §9. §43 AufenthG: держава заохочує участь. bamf.de.', dur:'6–12 міс.'},
-      {t:'Після 3 р. шлюбу → §31 самостійний ВНЖ', d:'§31 Abs.1 Nr.1: 3 р. шлюбу + 3 р. легального перебування → незалежний від подружжя Aufenthaltserlaubnis. Важливо у разі розлучення.', dur:'3 р.'},
-      {t:'Після 5 р. → §9 NE або Einbürgerung', d:'§9: 60 міс. RV + B1 + без Bürgергeld → NE. Або: Einbürgerung (натуралізація) після 3 р. подружжя з громадянином DE — спрощений шлях (§9 StAG).', dur:'5 р.'},
-    ],
-    student:[
-      {t:'Успішно завершити навчання / Ausbildung', d:'§16b або §16a. Після Abschluss: 18 місяців для пошуку роботи за спеціальністю — §20 Abs.3 Nr.2 (Jobsuche nach Studium). Це не Bürgergeld — дохід не обов\'язковий.', dur:'до закінчення'},
-      {t:'Знайти роботу за фахом (18 міс. Jobsuche)', d:'§20 Abs.3 дає 18 міс. для пошуку. Ресурси: make-it-in-germany.com, DAAD JobMarket, StepStone, LinkedIn. Якщо зарплата ≥ €41.041: Blue Card §18c — набагато швидший шлях до NE!', dur:'1–18 міс.'},
-      {t:'Отримати §18 або §18c (Blue Card) AufenthG', d:'§18: будь-яка офіційна зайнятість за кваліфікацією. §18c: якщо зарплата ≥ €45.300/р. або Mangelberuf — найкращий варіант! Германський диплом: Anerkennung не потрібна.', dur:'2–6 тиж.'},
-      {t:'Niederlassungserlaubnis §9 або §18c Abs.2', d:'§18c Blue Card + B1: лише 21 міс.! §9: 5 р. §18 + 60 міс. RV + B1. Obачно: 18 міс. Jobsuche §20 НЕ рахуються у 60 міс. Rente і не рахуються до §9 (перевірте в AB).', dur:'21 міс. (BC) або 5 р. (§9)'},
-    ],
-    freelance:[
-      {t:'Забезпечити регулярний дохід §21 Abs.1 AufenthG', d:'§21 вимагає "übergeordnetes wirtschaftliches Interesse" або позитивний Businessplan. Дохід мінімум €2.500/міс нетто — стабільно. Зберігайте: контракти, виписки банку, рахунки-фактури.', dur:'постійно'},
-      {t:'Регулярно подавати Steuererklärung (EÜR або Bilanz)', d:'Щорічно до Finanzamt. Steueridentifikationsnummer — обов\'язково. Umsatzsteuer-Voranmeldung щокварталу (якщо оборот > €22.000/р.). Зберігайте квитанції 10 р.', dur:'щорічно'},
-      {t:'Накопити 60 міс. Rentenversicherung (§9 Abs.2 Nr.3)', d:'Freelancer не застраховані обов\'язково (крім певних категорій). Варіанти: (1) Добровільні внески через DRV (§7 SGB VI). (2) Künstlersozialkasse (KSK) — якщо творча діяльність. Мінімальний внесок 2024: €96,60/міс.', dur:'до 60 міс.'},
-      {t:'Через 3 або 5 р. §21 → §9 NE або §21 Abs.4', d:'§21 Abs.4: особливо успішні самозайняті можуть отримати NE після 3 р. (на розсуд AB). §9 стандартно: 5 р. + 60 міс. RV + B1. Проконсультуйтесь щодо критеріїв "Erfolg" у вашій AB.', dur:'3–5 р.'},
-    ],
-    family:[
-      {t:'Оформити §27/§28/§29 Familiennachzug', d:'§28: до громадянина DE — найлегше. §29: до власника §9/§18c — спрощені вимоги. §27: загальний Familiennachzug. Документи: шлюбне свідоцтво/метрика + переклад + Nachweis статусу утримувача.', dur:'2–6 міс.'},
-      {t:'Виконувати умови і продовжувати ВНЖ', d:'Anmeldung, KV, сімейний зв\'язок (не розлучення), дохід (хоча б подружжя). Щорічне продовження до набуття права на §9 або §31.', dur:'постійно'},
-      {t:'Після 3 р. шлюбу + 3 р. перебування → §31', d:'§31 Abs.1 Nr.1 — незалежний від подружжя статус. Подавайте заяву в Ausländerbehörde з: шлюбним свідоцтвом + доказом перебування 3 р. + Anmeldung + KV.', dur:'3 р.'},
-      {t:'Через 5 р. → §9 Niederlassungserlaubnis', d:'60 міс. Rentenversicherung + B1 + без Bürgergeld + Führungszeugnis + Anmeldung → постійний незалежний ВНЖ.', dur:'5 р.'},
-    ],
-    chance:[
-      {t:'Chancenkarte §20a AufenthG (з 2024) — умови', d:'1 анerkannter Hochschulabschluss + 3 з 4 балів: (А) Deutschkenntnisse B2+; (Б) 3+ р. досвіду за фахом; (В) зв\'язки з DE (Studium, Praktikum, Geschwister тощо); (Г) вік до 35 р. Детальніше: make-it-in-germany.com.', dur:'перевірте зараз'},
-      {t:'Пошук роботи в DE — 1 рік', d:'Chancenkarte дозволяє: Kurzpraktikum до 2 тиж. (проба). Повна зайнятість — лише з Arbeitserlaubnis. При наявності пропозиції роботи → одразу на §18 або §18c.', dur:'до 12 міс.'},
-      {t:'Отримати §18 або §18c Blue Card', d:'При Arbeitsangebot: §18 (будь-яка зайнятість) або §18c (зарплата ≥ €45.300 або Mangelberuf ≥ €41.041). Blue Card: NE вже через 21 міс.!', dur:'після офери'},
-      {t:'§9 NE або §18c Abs.2 NE', d:'Blue Card → 21 міс. + B1 → NE. §18 → 60 міс. + 60 міс. RV + B1 → §9 NE. Chancenkarte-час (максимум 1 рік) до NE не рахується — лише §18/§18c.', dur:'21 міс.–5 р.'},
-    ],
-    generic:[
-      {t:'Визначте правову підставу вашого перебування', d:'Зверніться до Ausländerbehörde або Fachanwalt für Migrationsrecht для визначення найкращого шляху конкретно для вашої ситуації.', dur:'зараз'},
-      {t:'Виконайте базові умови §5 AufenthG', d:'(1) Anmeldung, (2) Krankenversicherung, (3) Lebensunterhalt без Bürgergeld, (4) відсутність загрози громадському порядку, (5) дійсний паспорт.', dur:'негайно'},
-      {t:'Безкоштовна консультація', d:'Caritas: caritas.de | AWO: awo.org | Diakonie: diakonie.de | IQ Netzwerk: migrationsberatung-iQ.de | Pro Asyl: proasyl.de', dur:'найближчим часом'},
-    ]
-  };
-
-  const chosen = paths[pathKey] || paths.generic;
   return chosen.map((s,i)=>
-    '<div class="pathStep"><div class="pNum">'+(i+1)+'</div><div style="flex:1">'+
-    '<div class="pText"><strong>'+s.t+'</strong></div>'+
-    '<div class="pText" style="margin-top:3px">'+s.d+'</div>'+
-    '<div class="pTime">⏱ '+s.dur+'</div></div></div>').join('');
+    `<div class="pathStep">
+      <div class="pNum">${i+1}</div>
+      <div>
+        <div class="pText"><strong>${s[0]}</strong></div>
+        <div class="pText">${s[1]}</div>
+        <div class="pTime">⏱ ${s[2]}</div>
+      </div>
+    </div>`).join('');
 }
-
 
 function restart() {
   Object.keys(D).forEach(k=>delete D[k]);
